@@ -158,9 +158,9 @@
         "package": "VaporTypedRoutes",
         "repositoryURL": "https://github.com/mattpolzin/VaporTypedRoutes.git",
         "state": {
-          "branch": "master",
+          "branch": null,
           "revision": "05154f914c62782db9c6d70e54feb49323219418",
-          "version": null
+          "version": "0.1.0"
         }
       },
       {
