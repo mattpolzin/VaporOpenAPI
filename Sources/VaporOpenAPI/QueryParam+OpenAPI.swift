@@ -57,7 +57,7 @@ extension AbstractQueryParam {
             )
         default:
             style = .form
-            jsonSchema = .string
+            jsonSchema = guessJsonSchema(for: swiftType)
         }
 
         schema = .init(

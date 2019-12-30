@@ -8,6 +8,7 @@
 import Foundation
 import OpenAPIKit
 import Vapor
+import Sampleable
 
 protocol _Wrapper {
     static var wrappedType: Any.Type { get }
@@ -34,6 +35,7 @@ extension AbstractRouteContext {
 
                 let contentType = responseTuple.contentType?.openAPIContentType
 
+                // first handle things explicitly supporting OpenAPI
                 if let schema = try (responseTuple.responseBodyType as? OpenAPIEncodedNodeType.Type)?.openAPINode(using: encoder) {
                     return (
                         statusCode,
@@ -46,11 +48,38 @@ extension AbstractRouteContext {
                     )
                 }
 
+                // then try for a generic guess if the content type is JSON
+                if contentType == .json,
+                    let sample = (responseTuple.responseBodyType as? AbstractSampleable.Type)?.abstractSample,
+                    let schema = try? genericOpenAPINode(for: sample, using: encoder) {
+
+                    return (
+                        statusCode,
+                        OpenAPI.Response(
+                            description: responseReason,
+                            content: [
+                                (contentType ?? .json): .init(schema: .init(schema))
+                            ]
+                        )
+                    )
+                }
+
+                // finally, handle binary files and give a wildly vague schema for anything else.
+                let schema: JSONSchema
+                switch contentType {
+                case .css, .csv, .form, .html, .javascript, .json, .jsonapi, .multipartForm, .txt, .xml:
+                    schema = .string
+                case .pdf, .rar, .tar, .zip:
+                    schema = .string(format: .binary)
+                case .none:
+                    schema = .string
+                }
+
                 return contentType.map {
                     OpenAPI.Response(
                         description: responseReason,
                         content: [
-                            $0: .init(schema: .init(.string(format: .binary)))
+                            $0: .init(schema: .init(schema))
                         ]
                     )
                 }.map { (statusCode, $0) }
