@@ -6,5 +6,4 @@
 //
 
 @_exported import OpenAPIKit
-@_exported import Vapor
 @_exported import VaporTypedRoutes

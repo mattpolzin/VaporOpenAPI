@@ -60,8 +60,8 @@
         "repositoryURL": "https://github.com/mattpolzin/OpenAPI.git",
         "state": {
           "branch": null,
-          "revision": "7a0b0e171a02e67519d163b8a3ddf8ddbf36e786",
-          "version": "0.9.0"
+          "revision": "44ded671ba54700f6948e166b7bd5dd331dd6a1e",
+          "version": "0.10.0"
         }
       },
       {
@@ -87,8 +87,8 @@
         "repositoryURL": "https://github.com/mattpolzin/Sampleable.git",
         "state": {
           "branch": null,
-          "revision": "8a88ca056a58587daa99c33a04c63c9d59429932",
-          "version": "2.0.0"
+          "revision": "df44bf1a860481109dcf455e3c6daf0a0f1bc259",
+          "version": "2.1.0"
         }
       },
       {
