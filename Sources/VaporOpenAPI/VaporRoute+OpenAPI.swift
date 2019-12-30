@@ -133,7 +133,7 @@ extension Vapor.Route {
                 parameters: parameters.map { .init($0) },
                 requestBody: requestBody,
                 responses: responses,
-                servers: []
+                servers: nil
             )
 
             return (
