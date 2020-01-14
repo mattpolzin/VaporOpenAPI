@@ -36,7 +36,7 @@ extension AbstractRouteContext {
                 let contentType = responseTuple.contentType?.openAPIContentType
 
                 // first handle things explicitly supporting OpenAPI
-                if let schema = try (responseTuple.responseBodyType as? OpenAPIEncodedNodeType.Type)?.openAPINode(using: encoder) {
+                if let schema = try (responseTuple.responseBodyType as? OpenAPIEncodedSchemaType.Type)?.openAPISchema(using: encoder) {
                     return (
                         statusCode,
                         OpenAPI.Response(
@@ -51,7 +51,7 @@ extension AbstractRouteContext {
                 // then try for a generic guess if the content type is JSON
                 if contentType == .json,
                     let sample = (responseTuple.responseBodyType as? AbstractSampleable.Type)?.abstractSample,
-                    let schema = try? genericOpenAPINode(for: sample, using: encoder) {
+                    let schema = try? genericOpenAPISchemaGuess(for: sample, using: encoder) {
 
                     return (
                         statusCode,
@@ -100,12 +100,12 @@ extension Vapor.Route {
 
         let verb = try method.openAPIVerb()
 
-        let requestBodyType = (requestType as? OpenAPIEncodedNodeType.Type)
-            ?? ((requestType as? _Wrapper.Type)?.wrappedType as? OpenAPIEncodedNodeType.Type)
+        let requestBodyType = (requestType as? OpenAPIEncodedSchemaType.Type)
+            ?? ((requestType as? _Wrapper.Type)?.wrappedType as? OpenAPIEncodedSchemaType.Type)
 
         let requestBody = try requestBodyType
             .map { requestType -> OpenAPI.Request in
-                let schema = try requestType.openAPINode(using: encoder)
+                let schema = try requestType.openAPISchema(using: encoder)
 
                 return OpenAPI.Request(
                     content: [
@@ -176,12 +176,12 @@ extension Vapor.Route {
             return try responseBodyType.openAPIResponses(using: encoder)
         }
 
-        let responseBodyType = (responseType as? OpenAPIEncodedNodeType.Type)
-            ?? ((responseType as? _Wrapper.Type)?.wrappedType as? OpenAPIEncodedNodeType.Type)
+        let responseBodyType = (responseType as? OpenAPIEncodedSchemaType.Type)
+            ?? ((responseType as? _Wrapper.Type)?.wrappedType as? OpenAPIEncodedSchemaType.Type)
 
         let successResponse = try responseBodyType
             .map { responseType -> OpenAPI.Response in
-                let schema = try responseType.openAPINode(using: encoder)
+                let schema = try responseType.openAPISchema(using: encoder)
 
                 return .init(
                     description: "Success",

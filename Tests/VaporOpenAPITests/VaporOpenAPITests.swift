@@ -50,7 +50,8 @@ This text supports _markdown_!
             info: info,
             servers: servers,
             paths: paths,
-            components: components
+            components: components,
+            security: []
         )
 
         XCTAssertEqual(document.paths.count, 1)

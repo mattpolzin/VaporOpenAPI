@@ -9,8 +9,8 @@ import Foundation
 import NIO
 import OpenAPIKit
 
-extension EventLoopFuture: OpenAPIEncodedNodeType where Value: OpenAPIEncodedNodeType {
-    public static func openAPINode(using encoder: JSONEncoder) throws -> JSONSchema {
-        return try Value.openAPINode(using: encoder)
+extension EventLoopFuture: OpenAPIEncodedSchemaType where Value: OpenAPIEncodedSchemaType {
+    public static func openAPISchema(using encoder: JSONEncoder) throws -> JSONSchema {
+        return try Value.openAPISchema(using: encoder)
     }
 }

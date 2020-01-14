@@ -31,8 +31,8 @@ extension AbstractQueryParam {
         let schema: OpenAPI.PathItem.Parameter.Schema
 
         func guessJsonSchema(for type: Any.Type) -> JSONSchema {
-            guard let schemaType = type as? OpenAPINodeType.Type,
-                let ret = try? schemaType.openAPINode() else {
+            guard let schemaType = type as? OpenAPISchemaType.Type,
+                let ret = try? schemaType.openAPISchema() else {
                     return .string
             }
             guard let allowedValues = self.allowedValues else {
