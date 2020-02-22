@@ -15,8 +15,8 @@
         "repositoryURL": "https://github.com/swift-server/async-http-client.git",
         "state": {
           "branch": null,
-          "revision": "48e284d1ea6d0e8baac1af1c4ad8bd298670caf6",
-          "version": "1.0.1"
+          "revision": "e2636a4c24e646d3e480fc666da0c090818beb09",
+          "version": "1.1.0"
         }
       },
       {
@@ -24,8 +24,8 @@
         "repositoryURL": "https://github.com/vapor/async-kit.git",
         "state": {
           "branch": null,
-          "revision": "cb8e6ee62dc6684a95132f8d46511956e78ee0f1",
-          "version": "1.0.0-beta.2"
+          "revision": "e67124898436b463af4eec9f98b17aff51f2d9bb",
+          "version": "1.0.0-beta.2.3"
         }
       },
       {
@@ -33,8 +33,17 @@
         "repositoryURL": "https://github.com/vapor/console-kit.git",
         "state": {
           "branch": null,
-          "revision": "535874e4654b17cebb422b9e17353e85d421a118",
-          "version": "4.0.0-beta.2"
+          "revision": "54585747b6a5c435b7852c026028710fd7a94bec",
+          "version": "4.0.0-beta.2.1"
+        }
+      },
+      {
+        "package": "FineJSON",
+        "repositoryURL": "https://github.com/omochi/FineJSON.git",
+        "state": {
+          "branch": null,
+          "revision": "05101709243cb66d80c92e645210a3b80cf4e17f",
+          "version": "1.14.0"
         }
       },
       {
@@ -60,8 +69,17 @@
         "repositoryURL": "https://github.com/mattpolzin/OpenAPIKit.git",
         "state": {
           "branch": null,
-          "revision": "7843345a17042260f987bbf372efc236d567f5a5",
-          "version": "0.11.0"
+          "revision": "02bf3f48c3678bb93869a10c7867d9a9373971dc",
+          "version": "0.20.0"
+        }
+      },
+      {
+        "package": "OrderedDictionary",
+        "repositoryURL": "https://github.com/mattpolzin/OrderedDictionary.git",
+        "state": {
+          "branch": null,
+          "revision": "389f38b3f70b3b8c04305a0247db773c9236907f",
+          "version": "1.1.0"
         }
       },
       {
@@ -71,6 +89,15 @@
           "branch": null,
           "revision": "0c9c08204142babc480938d704a23513d11420e5",
           "version": "2.3.1"
+        }
+      },
+      {
+        "package": "RichJSONParser",
+        "repositoryURL": "https://github.com/omochi/RichJSONParser.git",
+        "state": {
+          "branch": null,
+          "revision": "263e2ecfe88d0500fa99e4cbc8c948529d335534",
+          "version": "3.0.0"
         }
       },
       {
@@ -92,6 +119,15 @@
         }
       },
       {
+        "package": "swift-backtrace",
+        "repositoryURL": "https://github.com/ianpartridge/swift-backtrace.git",
+        "state": {
+          "branch": null,
+          "revision": "eaf2cef011c0c23d1701aa60b364def8015dc3c7",
+          "version": "1.1.1"
+        }
+      },
+      {
         "package": "swift-log",
         "repositoryURL": "https://github.com/apple/swift-log.git",
         "state": {
@@ -105,8 +141,8 @@
         "repositoryURL": "https://github.com/apple/swift-metrics.git",
         "state": {
           "branch": null,
-          "revision": "3fefedaaef285830cc98ae80231140122076a7e0",
-          "version": "1.2.0"
+          "revision": "09b72f68ed9b01b614c12855fc7e22876b97a97e",
+          "version": "1.2.1"
         }
       },
       {
@@ -114,8 +150,8 @@
         "repositoryURL": "https://github.com/apple/swift-nio.git",
         "state": {
           "branch": null,
-          "revision": "f6487a11d80bfb9a0a0a752b7442847c7e3a8253",
-          "version": "2.12.0"
+          "revision": "16ab4d657e1ad4e77bd5f8b94af8538561643053",
+          "version": "2.14.0"
         }
       },
       {
@@ -123,8 +159,8 @@
         "repositoryURL": "https://github.com/apple/swift-nio-extras.git",
         "state": {
           "branch": null,
-          "revision": "53808818c2015c45247cad74dc05c7a032c96a2f",
-          "version": "1.3.2"
+          "revision": "b4dbfacff47fb8d0f9e0a422d8d37935a9f10570",
+          "version": "1.4.0"
         }
       },
       {
@@ -132,8 +168,8 @@
         "repositoryURL": "https://github.com/apple/swift-nio-http2.git",
         "state": {
           "branch": null,
-          "revision": "c1bfb7ce3f201e41ff60ef38fa63e67e0eb66a24",
-          "version": "1.9.0"
+          "revision": "65ebab9db70623bf1b58305edaa26ee5629856ed",
+          "version": "1.9.1"
         }
       },
       {
@@ -141,8 +177,8 @@
         "repositoryURL": "https://github.com/apple/swift-nio-ssl.git",
         "state": {
           "branch": null,
-          "revision": "b75ffaba05b2cffdb1420d558f1a90b4e6c46dcc",
-          "version": "2.5.0"
+          "revision": "af46d9b58fafbb76f9b01177568d435a1b024f99",
+          "version": "2.6.2"
         }
       },
       {
@@ -150,8 +186,8 @@
         "repositoryURL": "https://github.com/vapor/vapor.git",
         "state": {
           "branch": null,
-          "revision": "adcce86be49463445a5b24c1bc3f0532b21ab845",
-          "version": "4.0.0-beta.3.1"
+          "revision": "6f61074a549b1da62b6d9ff93bf6f3f49306afdc",
+          "version": "4.0.0-beta.3.24"
         }
       },
       {
@@ -159,8 +195,8 @@
         "repositoryURL": "https://github.com/mattpolzin/VaporTypedRoutes.git",
         "state": {
           "branch": null,
-          "revision": "05154f914c62782db9c6d70e54feb49323219418",
-          "version": "0.1.0"
+          "revision": "1d27e82874be6b3be0438fd4728ce47196e8743a",
+          "version": "0.2.0"
         }
       },
       {
@@ -168,8 +204,17 @@
         "repositoryURL": "https://github.com/vapor/websocket-kit.git",
         "state": {
           "branch": null,
-          "revision": "4c9da4fe7d8186243418254031288ab5ee0202e4",
-          "version": "2.0.0-beta.2.1"
+          "revision": "766b4b0005a158550c345671c8e7cea42af104b6",
+          "version": "2.0.0-beta.2.3"
+        }
+      },
+      {
+        "package": "Yams",
+        "repositoryURL": "https://github.com/jpsim/Yams.git",
+        "state": {
+          "branch": null,
+          "revision": "c947a306d2e80ecb2c0859047b35c73b8e1ca27f",
+          "version": "2.0.0"
         }
       }
     ]
