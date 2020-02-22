@@ -9,6 +9,7 @@ import Foundation
 import OpenAPIKit
 import Vapor
 import Sampleable
+import OrderedDictionary
 
 protocol _Wrapper {
     static var wrappedType: Any.Type { get }
@@ -85,7 +86,7 @@ extension AbstractRouteContext {
                 }.map { (statusCode, $0) }
         }
 
-        return Dictionary(
+        return OrderedDictionary(
             responseTuples,
             uniquingKeysWith: { $1 }
         ).mapValues { .init($0) }
@@ -195,7 +196,7 @@ extension Vapor.Route {
             successResponse.map{ (OpenAPI.Response.StatusCode(200), $0) }
         ].compactMap { $0 }
 
-        return Dictionary(
+        return OrderedDictionary(
             responseTuples,
             uniquingKeysWith: { $1 }
         ).mapValues { .init($0) }
