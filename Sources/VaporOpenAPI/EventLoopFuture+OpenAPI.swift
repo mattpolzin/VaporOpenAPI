@@ -8,6 +8,7 @@
 import Foundation
 import NIO
 import OpenAPIKit
+import OpenAPIReflection
 
 extension EventLoopFuture: OpenAPIEncodedSchemaType where Value: OpenAPIEncodedSchemaType {
     public static func openAPISchema(using encoder: JSONEncoder) throws -> JSONSchema {
