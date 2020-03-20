@@ -95,6 +95,7 @@ extension AbstractRouteContext {
 }
 
 extension Vapor.Route {
+
     func openAPIPathOperationConstructor(using encoder: JSONEncoder) throws -> PathOperationConstructor {
         let pathComponents = try OpenAPI.PathComponents(
             path.map { try $0.openAPIPathComponent() }
@@ -102,19 +103,7 @@ extension Vapor.Route {
 
         let verb = try method.openAPIVerb()
 
-        let requestBodyType = (requestType as? OpenAPIEncodedSchemaType.Type)
-            ?? ((requestType as? _Wrapper.Type)?.wrappedType as? OpenAPIEncodedSchemaType.Type)
-
-        let requestBody = try requestBodyType
-            .map { requestType -> OpenAPI.Request in
-                let schema = try requestType.openAPISchema(using: encoder)
-
-                return OpenAPI.Request(
-                    content: [
-                        .json: .init(schema: .init(schema))
-                    ]
-                )
-        }
+        let requestBody = try openAPIRequest(for: requestType, using: encoder)
 
         let responses = try openAPIResponses(from: responseType, using: encoder)
 
@@ -170,6 +159,27 @@ extension Vapor.Route {
         }
 
         return []
+    }
+
+    private func openAPIRequest(for requestType: Any.Type, using encoder: JSONEncoder) throws -> OpenAPI.Request? {
+        guard !(requestType is EmptyRequestBody.Type) else {
+            return nil
+        }
+
+        let customRequestBodyType = (requestType as? OpenAPIEncodedSchemaType.Type)
+            ?? ((requestType as? _Wrapper.Type)?.wrappedType as? OpenAPIEncodedSchemaType.Type)
+
+        guard let requestBodyType = customRequestBodyType else {
+            return nil
+        }
+
+        let schema = try requestBodyType.openAPISchema(using: encoder)
+
+        return OpenAPI.Request(
+            content: [
+                .json: .init(schema: .init(schema))
+            ]
+        )
     }
 
     private func openAPIResponses(from responseType: Any.Type, using encoder: JSONEncoder) throws -> OpenAPI.Response.Map {

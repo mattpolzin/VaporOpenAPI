@@ -16,7 +16,7 @@ let package = Package(
         .package(url: "https://github.com/vapor/vapor.git", from: "4.0.0-rc.3"),
         .package(url: "https://github.com/mattpolzin/VaporTypedRoutes.git", .upToNextMinor(from: "0.3.0")),
         .package(url: "https://github.com/mattpolzin/OpenAPIKit.git", .upToNextMinor(from: "0.23.0")),
-        .package(url: "https://github.com/mattpolzin/OpenAPIReflection.git", .upToNextMinor(from: "0.0.1")),
+        .package(url: "https://github.com/mattpolzin/OpenAPIReflection.git", .upToNextMinor(from: "0.0.2")),
     ],
     targets: [
         .target(
