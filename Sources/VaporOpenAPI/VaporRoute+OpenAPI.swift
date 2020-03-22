@@ -37,6 +37,8 @@ extension AbstractRouteContext {
 
                 let contentType = responseTuple.contentType?.openAPIContentType
 
+                let example = reverseEngineeredExample(for: responseTuple.responseBodyType, using: encoder)
+
                 // first handle things explicitly supporting OpenAPI
                 if let schema = try (responseTuple.responseBodyType as? OpenAPIEncodedSchemaType.Type)?.openAPISchema(using: encoder) {
                     return (
@@ -44,7 +46,7 @@ extension AbstractRouteContext {
                         OpenAPI.Response(
                             description: responseReason,
                             content: [
-                                (contentType ?? .json): .init(schema: .init(schema))
+                                (contentType ?? .json): .init(schema: .init(schema), example: example)
                             ]
                         )
                     )
@@ -60,7 +62,7 @@ extension AbstractRouteContext {
                         OpenAPI.Response(
                             description: responseReason,
                             content: [
-                                (contentType ?? .json): .init(schema: .init(schema))
+                                (contentType ?? .json): .init(schema: .init(schema), example: example)
                             ]
                         )
                     )
@@ -166,6 +168,8 @@ extension Vapor.Route {
             return nil
         }
 
+        let example = reverseEngineeredExample(for: requestType, using: encoder)
+
         let customRequestBodyType = (requestType as? OpenAPIEncodedSchemaType.Type)
             ?? ((requestType as? _Wrapper.Type)?.wrappedType as? OpenAPIEncodedSchemaType.Type)
 
@@ -177,7 +181,7 @@ extension Vapor.Route {
 
         return OpenAPI.Request(
             content: [
-                .json: .init(schema: .init(schema))
+                .json: .init(schema: .init(schema), example: example)
             ]
         )
     }
@@ -212,6 +216,18 @@ extension Vapor.Route {
             uniquingKeysWith: { $1 }
         ).mapValues { .init($0) }
     }
+}
+
+private func reverseEngineeredExample(for typeToSample: Any.Type, using encoder: JSONEncoder) -> AnyCodable? {
+    guard let exampleType = typeToSample as? OpenAPIExampleProvider.Type else {
+        return nil
+    }
+
+    guard let exampleString = try? exampleType.openAPIExample(using: encoder) else {
+        return nil
+    }
+
+    return AnyCodable(exampleString)
 }
 
 typealias PartialPathOperationContext = (

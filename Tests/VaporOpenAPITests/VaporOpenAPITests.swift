@@ -1,5 +1,7 @@
 import XCTest
+import OpenAPIReflection
 import VaporOpenAPI
+import Sampleable
 import XCTVapor
 
 final class VaporOpenAPITests: XCTestCase {
@@ -8,6 +10,7 @@ final class VaporOpenAPITests: XCTestCase {
         defer { app.shutdown() }
 
         app.routes.get("hello", use: TestController.showRoute)
+        app.routes.post("hello", use: TestController.createRoute)
 
         // TODO: Add support for ContentEncoder to JSONAPIOpenAPI
         let jsonEncoder = JSONEncoder()
@@ -54,8 +57,19 @@ This text supports _markdown_!
             security: []
         )
 
+        print(String(data: try jsonEncoder.encode(document), encoding: .utf8)!)
+
         XCTAssertEqual(document.paths.count, 1)
+        XCTAssertNotNil(document.paths["/hello"]?.get)
+        XCTAssertNotNil(document.paths["/hello"]?.post)
+        XCTAssertNotNil(document.paths["/hello"]?.post?.requestBody?.b?.content[.json]?.example)
     }
+}
+
+struct CreatableResource: Codable, Sampleable, OpenAPIExampleProvider {
+    let stringValue: String
+
+    static let sample: Self = .init(stringValue: "hello world!")
 }
 
 struct TestShowRouteContext: RouteContext {
@@ -84,6 +98,31 @@ struct TestShowRouteContext: RouteContext {
     ])
 }
 
+struct TestCreateRouteContext: RouteContext {
+    typealias RequestBodyType = CreatableResource
+
+    static let shared = Self()
+
+    let badQuery: StringQueryParam = .init(name: "failHard")
+
+    let success: ResponseContext<String> = .init { response in
+        response.headers = Self.plainTextHeader
+        response.status = .ok
+    }
+
+    let badRequest: CannedResponse<String> = .init(
+        response: Response(
+            status: .badRequest,
+            headers: Self.plainTextHeader,
+            body: .empty
+        )
+    )
+
+    static let plainTextHeader = HTTPHeaders([
+        (HTTPHeaders.Name.contentType.description, HTTPMediaType.plainText.serialize())
+    ])
+}
+
 final class TestController {
     static func showRoute(_ req: TypedRequest<TestShowRouteContext>) -> EventLoopFuture<Response> {
         if req.query.badQuery != nil {
@@ -91,6 +130,13 @@ final class TestController {
         }
         if let text = req.query.echo {
             return req.response.success.encode("\(text)")
+        }
+        return req.response.success.encode("Hello")
+    }
+
+    static func createRoute(_ req: TypedRequest<TestCreateRouteContext>) -> EventLoopFuture<Response> {
+        if req.query.badQuery != nil {
+            return req.response.badRequest
         }
         return req.response.success.encode("Hello")
     }
