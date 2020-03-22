@@ -223,11 +223,7 @@ private func reverseEngineeredExample(for typeToSample: Any.Type, using encoder:
         return nil
     }
 
-    guard let exampleString = try? exampleType.openAPIExample(using: encoder) else {
-        return nil
-    }
-
-    return AnyCodable(exampleString)
+    return try? exampleType.openAPIExample(using: encoder)
 }
 
 typealias PartialPathOperationContext = (

@@ -62,7 +62,13 @@ This text supports _markdown_!
         XCTAssertEqual(document.paths.count, 1)
         XCTAssertNotNil(document.paths["/hello"]?.get)
         XCTAssertNotNil(document.paths["/hello"]?.post)
-        XCTAssertNotNil(document.paths["/hello"]?.post?.requestBody?.b?.content[.json]?.example)
+
+        let requestExample = document.paths["/hello"]?.post?.requestBody?.b?.content[.json]?.example
+        XCTAssertNotNil(requestExample)
+        let requestExampleDict = requestExample?.value as? [String: Any]
+        XCTAssertNotNil(requestExampleDict, "Expected request example to decode as a dictionary from String to Any")
+
+        XCTAssertEqual(requestExampleDict?["stringValue"] as? String, "hello world!")
     }
 }
 
