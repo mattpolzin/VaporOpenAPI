@@ -99,7 +99,7 @@ extension AbstractRouteContext {
 extension Vapor.Route {
 
     func openAPIPathOperationConstructor(using encoder: JSONEncoder) throws -> PathOperationConstructor {
-        let pathComponents = try OpenAPI.PathComponents(
+        let pathComponents = try OpenAPI.Path(
             path.map { try $0.openAPIPathComponent() }
         )
 
@@ -137,7 +137,7 @@ extension Vapor.Route {
         }
     }
 
-    func openAPIPathOperation(using encoder: JSONEncoder) throws -> (path: OpenAPI.PathComponents, verb: OpenAPI.HttpVerb, operation: OpenAPI.PathItem.Operation) {
+    func openAPIPathOperation(using encoder: JSONEncoder) throws -> (path: OpenAPI.Path, verb: OpenAPI.HttpVerb, operation: OpenAPI.PathItem.Operation) {
         let operation = try openAPIPathOperationConstructor(using: encoder)
 
         let summary = userInfo["openapi:summary"] as? String
@@ -232,4 +232,4 @@ typealias PartialPathOperationContext = (
     tags: [String]?
 )
 
-typealias PathOperationConstructor = (PartialPathOperationContext) -> (path: OpenAPI.PathComponents, verb: OpenAPI.HttpVerb, operation: OpenAPI.PathItem.Operation)
+typealias PathOperationConstructor = (PartialPathOperationContext) -> (path: OpenAPI.Path, verb: OpenAPI.HttpVerb, operation: OpenAPI.PathItem.Operation)

@@ -8,7 +8,6 @@
 import Foundation
 import OpenAPIKit
 import Vapor
-import OrderedDictionary
 
 extension Vapor.Routes {
     public func openAPIPathItems(using encoder: JSONEncoder) throws -> OpenAPI.PathItem.Map {

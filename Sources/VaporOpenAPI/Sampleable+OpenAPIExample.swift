@@ -9,7 +9,6 @@ import Foundation
 import OpenAPIKit
 import OpenAPIReflection
 import Sampleable
-import AnyCodable
 
 public protocol OpenAPIExampleProvider: OpenAPIEncodedSchemaType {
     static func openAPIExample(using encoder: JSONEncoder) throws -> AnyCodable?
