@@ -6,7 +6,6 @@
 //
 
 import OpenAPIKit
-import AnyCodable
 
 protocol _Array {
     static var elementType: Any.Type { get }
