@@ -10,7 +10,6 @@ import OpenAPIKit
 import OpenAPIReflection
 import Vapor
 import Sampleable
-import OrderedDictionary
 
 protocol _Wrapper {
     static var wrappedType: Any.Type { get }
