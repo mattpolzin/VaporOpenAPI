@@ -70,11 +70,11 @@ extension AbstractRouteContext {
                 // finally, handle binary files and give a wildly vague schema for anything else.
                 let schema: JSONSchema
                 switch contentType {
-                case .all, .textAll, .css, .csv, .form, .html, .javascript, .json, .jsonapi, .multipartForm, .rtf, .txt, .xml, .yaml:
+                case .any, .anyText, .css, .csv, .form, .html, .javascript, .json, .jsonapi, .multipartForm, .rtf, .txt, .xml, .yaml:
                     schema = .string
-                case .applicationAll, .audioAll, .imageAll, .videoAll, .bmp, .jpg, .mov, .mp3, .mp4, .mpg, .pdf, .rar, .tar, .tif, .zip:
+                case .anyApplication, .anyAudio, .anyImage, .anyVideo, .bmp, .jpg, .mov, .mp3, .mp4, .mpg, .pdf, .rar, .tar, .tif, .zip:
                     schema = .string(format: .binary)
-                case .none:
+                case .other, .none:
                     schema = .string
                 }
 
