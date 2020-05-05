@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/swift-server/async-http-client.git",
         "state": {
           "branch": null,
-          "revision": "e2636a4c24e646d3e480fc666da0c090818beb09",
-          "version": "1.1.0"
+          "revision": "037b70291941fe43de668066eb6fb802c5e181d2",
+          "version": "1.1.1"
         }
       },
       {
@@ -42,8 +42,8 @@
         "repositoryURL": "https://github.com/mattpolzin/OpenAPIKit.git",
         "state": {
           "branch": null,
-          "revision": "abbfc112ebef55e4eff1bba04340289aa1b6ba09",
-          "version": "0.29.0"
+          "revision": "3c7e9f497229507f7ba775759c141407f0e8e1da",
+          "version": "0.29.1"
         }
       },
       {
@@ -87,8 +87,8 @@
         "repositoryURL": "https://github.com/swift-server/swift-backtrace.git",
         "state": {
           "branch": null,
-          "revision": "eaf2cef011c0c23d1701aa60b364def8015dc3c7",
-          "version": "1.1.1"
+          "revision": "f2fd8c4845a123419c348e0bc4b3839c414077d5",
+          "version": "1.2.0"
         }
       },
       {
@@ -96,8 +96,8 @@
         "repositoryURL": "https://github.com/apple/swift-crypto.git",
         "state": {
           "branch": null,
-          "revision": "9be4a93a76d4b80105044747b35d456de7289c87",
-          "version": "1.0.0"
+          "revision": "d67ac68d09a95443303e9d6e37b34e7ba101d5f1",
+          "version": "1.0.1"
         }
       },
       {
@@ -123,8 +123,8 @@
         "repositoryURL": "https://github.com/apple/swift-nio.git",
         "state": {
           "branch": null,
-          "revision": "16ab4d657e1ad4e77bd5f8b94af8538561643053",
-          "version": "2.14.0"
+          "revision": "e876fb37410e0036b98b5361bb18e6854739572b",
+          "version": "2.16.0"
         }
       },
       {
@@ -132,8 +132,8 @@
         "repositoryURL": "https://github.com/apple/swift-nio-extras.git",
         "state": {
           "branch": null,
-          "revision": "b4dbfacff47fb8d0f9e0a422d8d37935a9f10570",
-          "version": "1.4.0"
+          "revision": "e0e76733600a2806b3dc4feae8cfebace858c1a2",
+          "version": "1.4.1"
         }
       },
       {
@@ -150,8 +150,8 @@
         "repositoryURL": "https://github.com/apple/swift-nio-ssl.git",
         "state": {
           "branch": null,
-          "revision": "af46d9b58fafbb76f9b01177568d435a1b024f99",
-          "version": "2.6.2"
+          "revision": "ae213938e151964aa691f0e902462fbe06baeeb6",
+          "version": "2.7.1"
         }
       },
       {
@@ -159,8 +159,8 @@
         "repositoryURL": "https://github.com/vapor/vapor.git",
         "state": {
           "branch": null,
-          "revision": "7f6c8277b8cbe4381d00ddcef3b898c820780324",
-          "version": "4.4.0"
+          "revision": "c70d45fe9cce525df5b5f4793a232596cd85484b",
+          "version": "4.5.0"
         }
       },
       {
@@ -168,8 +168,8 @@
         "repositoryURL": "https://github.com/mattpolzin/VaporTypedRoutes.git",
         "state": {
           "branch": null,
-          "revision": "49264de8f9e5e905c27d8d95e26e2e0e8fe96bb1",
-          "version": "0.4.0"
+          "revision": "d04a5460142e7a5085d8296b0b5be2f7f1c0236f",
+          "version": "0.5.0"
         }
       },
       {
@@ -177,8 +177,8 @@
         "repositoryURL": "https://github.com/vapor/websocket-kit.git",
         "state": {
           "branch": null,
-          "revision": "f46778e3f1452cc80a0a6c422cdc52a5d0258795",
-          "version": "2.0.0"
+          "revision": "021edd1ca55451ad15b3e84da6b4064e4b877b34",
+          "version": "2.1.0"
         }
       },
       {
