@@ -9,8 +9,13 @@ final class VaporOpenAPITests: XCTestCase {
         let app = Application(.testing)
         defer { app.shutdown() }
 
-        app.routes.get("hello", use: TestController.showRoute)
-        app.routes.post("hello", use: TestController.createRoute)
+        app.openAPI.get("hello", use: TestController.indexRoute)
+        app.openAPI.post("hello", use: TestController.createRoute)
+        app.openAPI.get(
+            "hello",
+            ":id".description("hello world"),
+            use: TestController.showRoute
+        )
 
         // TODO: Add support for ContentEncoder to JSONAPIOpenAPI
         let jsonEncoder = JSONEncoder()
@@ -57,11 +62,12 @@ This text supports _markdown_!
             security: []
         )
 
-        print(String(data: try jsonEncoder.encode(document), encoding: .utf8)!)
-
-        XCTAssertEqual(document.paths.count, 1)
+        XCTAssertEqual(document.paths.count, 2)
         XCTAssertNotNil(document.paths["/hello"]?.get)
         XCTAssertNotNil(document.paths["/hello"]?.post)
+        XCTAssertNotNil(document.paths["/hello/{id}"]?.get)
+
+        XCTAssertEqual(document.paths["/hello/{id}"]?.get?.parameters[0].parameterValue?.description, "hello world")
 
         let requestExample = document.paths["/hello"]?.post?.requestBody?.b?.content[.json]?.example
         XCTAssertNotNil(requestExample)
@@ -78,8 +84,37 @@ struct CreatableResource: Codable, Sampleable, OpenAPIExampleProvider {
     static let sample: Self = .init(stringValue: "hello world!")
 }
 
+struct TestIndexRouteContext: RouteContext {
+    typealias RequestBodyType = EmptyRequestBody
+
+    static let defaultContentType: HTTPMediaType? = nil
+
+    static let shared = Self()
+
+    let echo: IntegerQueryParam = .init(name: "echo")
+
+    let success: ResponseContext<String> = .init { response in
+        response.headers = Self.plainTextHeader
+        response.status = .ok
+    }
+
+    let badRequest: CannedResponse<String> = .init(
+        response: Response(
+            status: .badRequest,
+            headers: Self.plainTextHeader,
+            body: .empty
+        )
+    )
+
+    static let plainTextHeader = HTTPHeaders([
+        (HTTPHeaders.Name.contentType.description, HTTPMediaType.plainText.serialize())
+    ])
+}
+
 struct TestShowRouteContext: RouteContext {
     typealias RequestBodyType = EmptyRequestBody
+
+    static let defaultContentType: HTTPMediaType? = nil
 
     static let shared = Self()
 
@@ -107,6 +142,8 @@ struct TestShowRouteContext: RouteContext {
 struct TestCreateRouteContext: RouteContext {
     typealias RequestBodyType = CreatableResource
 
+    static let defaultContentType: HTTPMediaType? = nil
+
     static let shared = Self()
 
     let badQuery: StringQueryParam = .init(name: "failHard")
@@ -130,6 +167,13 @@ struct TestCreateRouteContext: RouteContext {
 }
 
 final class TestController {
+    static func indexRoute(_ req: TypedRequest<TestIndexRouteContext>) -> EventLoopFuture<Response> {
+        if let text = req.query.echo {
+            return req.response.success.encode("\(text)")
+        }
+        return req.response.success.encode("Hello")
+    }
+
     static func showRoute(_ req: TypedRequest<TestShowRouteContext>) -> EventLoopFuture<Response> {
         if req.query.badQuery != nil {
             return req.response.badRequest

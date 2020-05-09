@@ -108,7 +108,7 @@ extension Vapor.Route {
 
         let responses = try openAPIResponses(from: responseType, using: encoder)
 
-        let pathParameters = path.compactMap { $0.openAPIPathParameter }
+        let pathParameters = path.compactMap { $0.openAPIPathParameter(in: self) }
         let queryParameters = openAPIQueryParams(from: responseType)
 
         let parameters = pathParameters

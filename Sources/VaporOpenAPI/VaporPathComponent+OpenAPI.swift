@@ -21,13 +21,16 @@ extension Vapor.PathComponent {
         }
     }
 
-    internal var openAPIPathParameter: OpenAPI.PathItem.Parameter? {
+    internal func openAPIPathParameter(in route: Vapor.Route) -> OpenAPI.PathItem.Parameter? {
         switch self {
         case .parameter(let name):
+            let description: String? = route.userInfo["openapi:parameter:\(name)"] as? String
+
             return .init(
                 name: name,
-                parameterLocation: .path,
-                schema: .string
+                context: .path,
+                schema: .string,
+                description: description
             )
         default:
             return nil

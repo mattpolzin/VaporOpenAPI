@@ -66,7 +66,7 @@ extension AbstractQueryParam {
 
         return .init(
             name: name,
-            parameterLocation: .query,
+            context: .query,
             schema: schema,
             description: description
         )
