@@ -24,6 +24,7 @@ func routes(_ app: Application) {
         ":type".description("The type of widget"),
         ":id",
         use: WidgetController.show 
-    )
+    ).tags("Widgets")
+      .summary("Get a widget")
 }
 ```
