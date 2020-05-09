@@ -52,7 +52,7 @@ extension AbstractRouteContext {
                 }
 
                 // then try for a generic guess if the content type is JSON
-                if contentType == .json,
+                if (contentType == .json || contentType == .jsonapi),
                     let sample = (responseTuple.responseBodyType as? AbstractSampleable.Type)?.abstractSample,
                     let schema = try? genericOpenAPISchemaGuess(for: sample, using: encoder) {
 
