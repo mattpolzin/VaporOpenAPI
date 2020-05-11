@@ -9,11 +9,11 @@ final class VaporOpenAPITests: XCTestCase {
         let app = Application(.testing)
         defer { app.shutdown() }
 
-        app.openAPI.get("hello", use: TestController.indexRoute)
-        app.openAPI.post("hello", use: TestController.createRoute)
-        app.openAPI.get(
+        app.get("hello", use: TestController.indexRoute)
+        app.post("hello", use: TestController.createRoute)
+        app.get(
             "hello",
-            ":id".description("hello world"),
+            ":id".parameterType(Int.self).description("hello world"),
             use: TestController.showRoute
         )
 
@@ -68,6 +68,7 @@ This text supports _markdown_!
         XCTAssertNotNil(document.paths["/hello/{id}"]?.get)
 
         XCTAssertEqual(document.paths["/hello/{id}"]?.get?.parameters[0].parameterValue?.description, "hello world")
+        XCTAssertEqual(document.paths["/hello/{id}"]?.get?.parameters[0].parameterValue?.schemaOrContent.schemaValue?.schema.schemaValue, .integer)
 
         let requestExample = document.paths["/hello"]?.post?.requestBody?.b?.content[.json]?.example
         XCTAssertNotNil(requestExample)

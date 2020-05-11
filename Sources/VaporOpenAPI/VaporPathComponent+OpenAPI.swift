@@ -6,6 +6,7 @@
 //
 
 import Vapor
+import VaporTypedRoutes
 import OpenAPIKit
 
 extension Vapor.PathComponent {
@@ -24,13 +25,13 @@ extension Vapor.PathComponent {
     internal func openAPIPathParameter(in route: Vapor.Route) -> OpenAPI.PathItem.Parameter? {
         switch self {
         case .parameter(let name):
-            let description: String? = route.userInfo["openapi:parameter:\(name)"] as? String
+            let meta = route.userInfo["typed_parameter:\(name)"] as? TypedPathComponent.Meta
 
             return .init(
                 name: name,
                 context: .path,
-                schema: .string,
-                description: description
+                schema: (meta?.type as? OpenAPISchemaType.Type)?.openAPISchema ?? .string,
+                description: meta?.description ?? ""
             )
         default:
             return nil
