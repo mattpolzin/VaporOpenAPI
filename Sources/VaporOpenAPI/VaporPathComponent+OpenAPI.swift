@@ -31,7 +31,7 @@ extension Vapor.PathComponent {
                 name: name,
                 context: .path,
                 schema: (meta?.type as? OpenAPISchemaType.Type)?.openAPISchema ?? .string,
-                description: meta?.description ?? ""
+                description: meta?.description
             )
         default:
             return nil
