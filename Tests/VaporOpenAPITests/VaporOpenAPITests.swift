@@ -68,7 +68,7 @@ This text supports _markdown_!
         XCTAssertNotNil(document.paths["/hello/{id}"]?.get)
 
         XCTAssertEqual(document.paths["/hello/{id}"]?.get?.parameters[0].parameterValue?.description, "hello world")
-        XCTAssertEqual(document.paths["/hello/{id}"]?.get?.parameters[0].parameterValue?.schemaOrContent.schemaValue?.schema.schemaValue, .integer)
+        XCTAssertEqual(document.paths["/hello/{id}"]?.get?.parameters[0].parameterValue?.schemaOrContent.schemaValue, .integer)
 
         let requestExample = document.paths["/hello"]?.post?.requestBody?.b?.content[.json]?.example
         XCTAssertNotNil(requestExample)

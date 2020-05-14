@@ -26,8 +26,8 @@ extension Dictionary: _Dictionary {
 }
 
 extension AbstractQueryParam {
-    public func openAPIQueryParam() -> OpenAPI.PathItem.Parameter {
-        let schema: OpenAPI.PathItem.Parameter.Schema
+    public func openAPIQueryParam() -> OpenAPI.Parameter {
+        let schema: OpenAPI.Parameter.SchemaContext
 
         func guessJsonSchema(for type: Any.Type) -> JSONSchema {
             guard let schemaType = type as? OpenAPISchemaType.Type else {
@@ -41,7 +41,7 @@ extension AbstractQueryParam {
             return ret.with(allowedValues: allowedValues.map { AnyCodable($0) })
         }
 
-        let style: OpenAPI.PathItem.Parameter.Schema.Style
+        let style: OpenAPI.Parameter.SchemaContext.Style
         let jsonSchema: JSONSchema
         switch swiftType {
         case let t as _Dictionary.Type:

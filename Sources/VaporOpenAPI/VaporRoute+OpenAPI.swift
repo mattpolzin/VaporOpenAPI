@@ -116,7 +116,7 @@ extension Vapor.Route {
 
         return { context in
 
-            let operation = OpenAPI.PathItem.Operation(
+            let operation = OpenAPI.Operation(
                 tags: context.tags,
                 summary: context.summary,
                 description: context.description,
@@ -136,7 +136,7 @@ extension Vapor.Route {
         }
     }
 
-    func openAPIPathOperation(using encoder: JSONEncoder) throws -> (path: OpenAPI.Path, verb: OpenAPI.HttpVerb, operation: OpenAPI.PathItem.Operation) {
+    func openAPIPathOperation(using encoder: JSONEncoder) throws -> (path: OpenAPI.Path, verb: OpenAPI.HttpMethod, operation: OpenAPI.Operation) {
         let operation = try openAPIPathOperationConstructor(using: encoder)
 
         let summary = userInfo["openapi:summary"] as? String
@@ -152,7 +152,7 @@ extension Vapor.Route {
         )
     }
 
-    private func openAPIQueryParams(from responseType: Any.Type) -> [OpenAPI.PathItem.Parameter] {
+    private func openAPIQueryParams(from responseType: Any.Type) -> [OpenAPI.Parameter] {
         if let responseBodyType = responseType as? AbstractRouteContext.Type {
             return responseBodyType
                 .requestQueryParams
@@ -231,4 +231,4 @@ typealias PartialPathOperationContext = (
     tags: [String]?
 )
 
-typealias PathOperationConstructor = (PartialPathOperationContext) -> (path: OpenAPI.Path, verb: OpenAPI.HttpVerb, operation: OpenAPI.PathItem.Operation)
+typealias PathOperationConstructor = (PartialPathOperationContext) -> (path: OpenAPI.Path, verb: OpenAPI.HttpMethod, operation: OpenAPI.Operation)

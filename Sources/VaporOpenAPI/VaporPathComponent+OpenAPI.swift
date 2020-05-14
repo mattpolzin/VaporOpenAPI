@@ -22,7 +22,7 @@ extension Vapor.PathComponent {
         }
     }
 
-    internal func openAPIPathParameter(in route: Vapor.Route) -> OpenAPI.PathItem.Parameter? {
+    internal func openAPIPathParameter(in route: Vapor.Route) -> OpenAPI.Parameter? {
         switch self {
         case .parameter(let name):
             let meta = route.userInfo["typed_parameter:\(name)"] as? TypedPathComponent.Meta

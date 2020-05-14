@@ -9,7 +9,7 @@ import Vapor
 import OpenAPIKit
 
 extension HTTPMethod {
-    internal func openAPIVerb() throws -> OpenAPI.HttpVerb {
+    internal func openAPIVerb() throws -> OpenAPI.HttpMethod {
         switch self {
         case .GET:
             return .get
