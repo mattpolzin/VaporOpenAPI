@@ -42,26 +42,31 @@ extension AbstractQueryParam {
         }
 
         let style: OpenAPI.Parameter.SchemaContext.Style
+        let explode: Bool
         let jsonSchema: JSONSchema
         switch swiftType {
         case let t as _Dictionary.Type:
             style = .deepObject
+            explode = true
             jsonSchema = .object(
                 additionalProperties: .init(guessJsonSchema(for: t.valueType))
             )
         case let t as _Array.Type:
             style = .form
+            explode = false
             jsonSchema = .array(
                 items: guessJsonSchema(for: t.elementType)
             )
         default:
             style = .form
+            explode = true
             jsonSchema = guessJsonSchema(for: swiftType)
         }
 
         schema = .init(
             jsonSchema,
-            style: style
+            style: style,
+            explode: explode
         )
 
         return .init(
