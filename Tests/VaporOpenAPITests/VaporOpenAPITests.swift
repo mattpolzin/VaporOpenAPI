@@ -86,6 +86,7 @@ This text supports _markdown_!
 
         let requestExample = document.paths["/hello"]?.post?.requestBody?.b?.content[.json]?.example
         XCTAssertNotNil(requestExample)
+        XCTAssertNotNil(document.paths["/hello"]?.post?.responses[.status(code: 201)])
         let requestExampleDict = requestExample?.value as? [String: Any]
         XCTAssertNotNil(requestExampleDict, "Expected request example to decode as a dictionary from String to Any")
 
@@ -165,7 +166,7 @@ struct TestCreateRouteContext: RouteContext {
 
     let success: ResponseContext<String> = .init { response in
         response.headers = Self.plainTextHeader
-        response.status = .ok
+        response.status = .created
     }
 
     let badRequest: CannedResponse<String> = .init(
