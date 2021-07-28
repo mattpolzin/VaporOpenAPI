@@ -43,6 +43,16 @@ extension AbstractRouteContext {
                         )
                     )
                 }
+                
+                // special handling for status code 201 (created)
+                if statusCode == .status(code: 201) {
+                    return (
+                        statusCode,
+                        OpenAPI.Response(
+                            description: responseReason
+                        )
+                    )
+                }
 
                 let contentType = responseTuple.contentType?.openAPIContentType
 
