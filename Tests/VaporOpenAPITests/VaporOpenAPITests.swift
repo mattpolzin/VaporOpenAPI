@@ -74,6 +74,10 @@ This text supports _markdown_!
         XCTAssertNil(document.paths["/hello"]?.trace)
         XCTAssertNotNil(document.paths["/hello/{id}"]?.get)
 
+        XCTAssertNotNil(document.paths["/hello"]?.get?.responses[.status(code: 200)])
+        XCTAssertNotNil(document.paths["/hello"]?.get?.responses[.status(code: 400)])
+        XCTAssertNotNil(document.paths["/hello"]?.delete?.responses[.status(code: 204)])
+
         XCTAssertEqual(document.paths["/hello/{id}"]?.get?.parameters[0].parameterValue?.description, "hello world")
         XCTAssertEqual(document.paths["/hello/{id}"]?.get?.parameters[0].parameterValue?.schemaOrContent.schemaValue, .integer)
 
