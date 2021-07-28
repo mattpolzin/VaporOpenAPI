@@ -16,6 +16,7 @@ final class VaporOpenAPITests: XCTestCase {
             ":id".parameterType(Int.self).description("hello world"),
             use: TestController.showRoute
         )
+        app.delete("hello", use: TestController.deleteRoute)
 
         // TODO: Add support for ContentEncoder to JSONAPIOpenAPI
         let jsonEncoder = JSONEncoder()
@@ -65,6 +66,12 @@ This text supports _markdown_!
         XCTAssertEqual(document.paths.count, 2)
         XCTAssertNotNil(document.paths["/hello"]?.get)
         XCTAssertNotNil(document.paths["/hello"]?.post)
+        XCTAssertNotNil(document.paths["/hello"]?.delete)
+        XCTAssertNil(document.paths["/hello"]?.put)
+        XCTAssertNil(document.paths["/hello"]?.patch)
+        XCTAssertNil(document.paths["/hello"]?.head)
+        XCTAssertNil(document.paths["/hello"]?.options)
+        XCTAssertNil(document.paths["/hello"]?.trace)
         XCTAssertNotNil(document.paths["/hello/{id}"]?.get)
 
         XCTAssertEqual(document.paths["/hello/{id}"]?.get?.parameters[0].parameterValue?.description, "hello world")
@@ -167,6 +174,18 @@ struct TestCreateRouteContext: RouteContext {
     ])
 }
 
+struct TestDeleteRouteContext: RouteContext {
+    typealias RequestBodyType = EmptyRequestBody
+
+    static let defaultContentType: HTTPMediaType? = nil
+
+    static let shared = Self()
+
+    let success: ResponseContext<EmptyResponseBody> = .init { response in
+        response.status = .noContent
+    }
+}
+
 final class TestController {
     static func indexRoute(_ req: TypedRequest<TestIndexRouteContext>) -> EventLoopFuture<Response> {
         if let text = req.query.echo {
@@ -190,5 +209,9 @@ final class TestController {
             return req.response.badRequest
         }
         return req.response.success.encode("Hello")
+    }
+
+    static func deleteRoute(_ req: TypedRequest<TestDeleteRouteContext>) -> EventLoopFuture<Response> {
+        return req.response.success.encodeEmptyResponse()
     }
 }
