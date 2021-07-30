@@ -17,6 +17,7 @@ final class VaporOpenAPITests: XCTestCase {
             use: TestController.showRoute
         )
         app.delete("hello", use: TestController.deleteRoute)
+        app.post("hello", "empty", use: TestController.createEmptyReturn)
 
         // TODO: Add support for ContentEncoder to JSONAPIOpenAPI
         let jsonEncoder = JSONEncoder()
@@ -63,7 +64,7 @@ This text supports _markdown_!
             security: []
         )
 
-        XCTAssertEqual(document.paths.count, 2)
+        XCTAssertEqual(document.paths.count, 3)
         XCTAssertNotNil(document.paths["/hello"]?.get)
         XCTAssertNotNil(document.paths["/hello"]?.post)
         XCTAssertNotNil(document.paths["/hello"]?.delete)
@@ -77,12 +78,15 @@ This text supports _markdown_!
         XCTAssertNotNil(document.paths["/hello"]?.get?.responses[.status(code: 200)])
         XCTAssertNotNil(document.paths["/hello"]?.get?.responses[.status(code: 400)])
         XCTAssertNotNil(document.paths["/hello"]?.delete?.responses[.status(code: 204)])
+        
+        XCTAssertNotNil(document.paths["/hello/empty"]?.post?.responses[.status(code: 201)])
 
         XCTAssertEqual(document.paths["/hello/{id}"]?.get?.parameters[0].parameterValue?.description, "hello world")
         XCTAssertEqual(document.paths["/hello/{id}"]?.get?.parameters[0].parameterValue?.schemaOrContent.schemaValue, .integer)
 
         let requestExample = document.paths["/hello"]?.post?.requestBody?.b?.content[.json]?.example
         XCTAssertNotNil(requestExample)
+        XCTAssertNotNil(document.paths["/hello"]?.post?.responses[.status(code: 201)])
         let requestExampleDict = requestExample?.value as? [String: Any]
         XCTAssertNotNil(requestExampleDict, "Expected request example to decode as a dictionary from String to Any")
 
@@ -162,7 +166,7 @@ struct TestCreateRouteContext: RouteContext {
 
     let success: ResponseContext<String> = .init { response in
         response.headers = Self.plainTextHeader
-        response.status = .ok
+        response.status = .created
     }
 
     let badRequest: CannedResponse<String> = .init(
@@ -187,6 +191,18 @@ struct TestDeleteRouteContext: RouteContext {
 
     let success: ResponseContext<EmptyResponseBody> = .init { response in
         response.status = .noContent
+    }
+}
+
+struct TestCreateEmptyReturnRouteContext: RouteContext {
+    typealias RequestBodyType = CreatableResource
+
+    static let defaultContentType: HTTPMediaType? = nil
+
+    static let shared = Self()
+
+    let success: ResponseContext<EmptyResponseBody> = .init { response in
+        response.status = .created
     }
 }
 
@@ -216,6 +232,10 @@ final class TestController {
     }
 
     static func deleteRoute(_ req: TypedRequest<TestDeleteRouteContext>) -> EventLoopFuture<Response> {
+        return req.response.success.encodeEmptyResponse()
+    }
+    
+    static func createEmptyReturn(_ req: TypedRequest<TestCreateEmptyReturnRouteContext>) -> EventLoopFuture<Response> {
         return req.response.success.encodeEmptyResponse()
     }
 }

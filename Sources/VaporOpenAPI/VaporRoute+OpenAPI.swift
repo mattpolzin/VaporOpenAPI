@@ -34,8 +34,7 @@ extension AbstractRouteContext {
                 let responseReason = HTTPStatus(statusCode: responseTuple.statusCode)
                     .reasonPhrase
 
-                // special handling for status code 204 (no content)
-                if statusCode == .status(code: 204) {
+                if responseTuple.responseBodyType == EmptyResponseBody.self {
                     return (
                         statusCode,
                         OpenAPI.Response(
