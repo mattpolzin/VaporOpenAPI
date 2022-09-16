@@ -7,7 +7,9 @@
 
 import OpenAPIKit
 
-/// A protocol for OpenAPI Arrays.
+/// A protocol meant only for internal use.
+/// Allows generic constraints and runtime casts on arrays
+/// even though concrete arrays have an associated type.
 protocol _Array {
     /// The type of element in the array.
     static var elementType: Any.Type { get }
