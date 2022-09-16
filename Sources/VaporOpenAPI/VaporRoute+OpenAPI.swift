@@ -154,8 +154,18 @@ extension Vapor.Route {
 
     /// Generates an OpenAPI `PathOperation` equivalent to the Vapor `Route`.
     /// - Parameters:
-    ///   - encoder: The JSON encoder to generate the `PathOperation` with.
-    func openAPIPathOperation(using encoder: JSONEncoder) throws -> PathOperation {
+    ///   - encoder: An optional override JSON encoder to generate the `PathOperation` with. Otherwise, defaults to the ContentEncoder.
+    func openAPIPathOperation(using encoder: JSONEncoder? = nil) throws -> PathOperation {
+        guard
+            let encoder = try encoder ?? ContentConfiguration
+                .global
+                .requireEncoder(for: .json)
+                as? JSONEncoder
+        else {
+            // This is an Abort since this is an error with Vapor.
+            throw Abort(.internalServerError, reason: "Couldn't get encoder for OpenAPI schema.")
+        }
+
         let operation = try openAPIPathOperationConstructor(using: encoder)
 
         let summary = userInfo["openapi:summary"] as? String

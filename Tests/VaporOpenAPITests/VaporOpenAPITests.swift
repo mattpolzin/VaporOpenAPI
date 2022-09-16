@@ -41,17 +41,6 @@ final class VaporOpenAPITests: XCTestCase {
 
     /// Just the route-checking bits in their own function so we can test out EventLoopFuture handling and async/await cleanly.
     func testRoutes(on app: Application) throws {
-        // TODO: Add support for ContentEncoder to JSONAPIOpenAPI
-        let jsonEncoder = JSONEncoder()
-        if #available(macOS 10.12, *) {
-            jsonEncoder.dateEncodingStrategy = .iso8601
-            jsonEncoder.outputFormatting = .sortedKeys
-        }
-#if os(Linux)
-        jsonEncoder.dateEncodingStrategy = .iso8601
-        jsonEncoder.outputFormatting = .sortedKeys
-#endif
-
         let info = OpenAPI.Document.Info(
             title: "Vapor OpenAPI Test API",
             description:
@@ -76,7 +65,7 @@ This text supports _markdown_!
             headers: [:]
         )
 
-        let paths = try app.routes.openAPIPathItems(using: jsonEncoder)
+        let paths = try app.routes.openAPIPathItems()
 
         let document = OpenAPI.Document(
             info: info,
