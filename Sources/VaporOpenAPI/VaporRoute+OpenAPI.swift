@@ -11,7 +11,9 @@ import OpenAPIReflection
 import Vapor
 import Sampleable
 
+/// Types that contain wrapped values (for OpenAPI conversion).
 protocol _Wrapper {
+    /// The wrapped type.
     static var wrappedType: Any.Type { get }
 }
 
@@ -22,8 +24,11 @@ extension Optional: _Wrapper {
 }
 
 extension AbstractRouteContext {
+    /// The OpenAPI equivalents of any responses in the route context.
+    /// - Parameters:
+    ///  - encoder: The JSON encoder to use to generate the responses.
+    /// - Returns: A `Response.Map` containing the converted responses.
     public static func openAPIResponses(using encoder: JSONEncoder) throws -> OpenAPI.Response.Map {
-
         let responseTuples = try responseBodyTuples
             .compactMap { responseTuple -> (OpenAPI.Response.StatusCode, OpenAPI.Response)? in
 
@@ -105,7 +110,9 @@ extension AbstractRouteContext {
 }
 
 extension Vapor.Route {
-
+    /// Generates the constructor for an OpenAPI `PathOperation` equivalent to the Vapor `Route`.
+    /// - Parameters:
+    ///   - encoder: The JSON encoder to generate the `PathOperationConstructor` with.
     func openAPIPathOperationConstructor(using encoder: JSONEncoder) throws -> PathOperationConstructor {
         let pathComponents = try OpenAPI.Path(
             path.map { try $0.openAPIPathComponent() }
@@ -145,7 +152,10 @@ extension Vapor.Route {
         }
     }
 
-    func openAPIPathOperation(using encoder: JSONEncoder) throws -> (path: OpenAPI.Path, verb: OpenAPI.HttpMethod, operation: OpenAPI.Operation) {
+    /// Generates an OpenAPI `PathOperation` equivalent to the Vapor `Route`.
+    /// - Parameters:
+    ///   - encoder: The JSON encoder to generate the `PathOperation` with.
+    func openAPIPathOperation(using encoder: JSONEncoder) throws -> PathOperation {
         let operation = try openAPIPathOperationConstructor(using: encoder)
 
         let summary = userInfo["openapi:summary"] as? String
@@ -161,6 +171,9 @@ extension Vapor.Route {
         )
     }
 
+    /// Generates an array of OpenAPI parameters equivalent to the query params in the given response's body type.
+    /// - Parameters:
+    ///   - responseType: The type of response to get the query parameters from. Must be an `AbstractRouteContext` to extract query parameters.
     private func openAPIQueryParams(from responseType: Any.Type) -> [OpenAPI.Parameter] {
         if let responseBodyType = responseType as? AbstractRouteContext.Type {
             return responseBodyType
@@ -171,6 +184,10 @@ extension Vapor.Route {
         return []
     }
 
+    /// Generates the equivalent OpenAPI request for a given request type.
+    /// - Parameters:
+    ///   - requestType: The request body type to convert.
+    ///   - encoder: The JSON encoder to generate the OpenAPI request with.
     private func openAPIRequest(for requestType: Any.Type, using encoder: JSONEncoder) throws -> OpenAPI.Request? {
         guard !(requestType is EmptyRequestBody.Type) else {
             return nil
@@ -194,8 +211,11 @@ extension Vapor.Route {
         )
     }
 
+    /// Generates the equivalent OpenAPI request for a given request type.
+    /// - Parameters:
+    ///   - responseType: The response type to convert. If it conforms to `AbstractRouteContext`, this function will use all included responses.
+    ///   - encoder: The JSON encoder to generate the OpenAPI response map with.
     private func openAPIResponses(from responseType: Any.Type, using encoder: JSONEncoder) throws -> OpenAPI.Response.Map {
-
         if let responseBodyType = responseType as? AbstractRouteContext.Type {
             return try responseBodyType.openAPIResponses(using: encoder)
         }
@@ -226,6 +246,10 @@ extension Vapor.Route {
     }
 }
 
+/// Generates an example from a given type.
+/// - Parameters:
+///   - typeToSample: The type to generate a sample from. If it doesn't conform to `OpenAPIExampleProvider`, an example can't be generated.
+///   - encoder: The JSON encoder to generate the example with.
 private func reverseEngineeredExample(for typeToSample: Any.Type, using encoder: JSONEncoder) -> AnyCodable? {
     guard let exampleType = typeToSample as? OpenAPIExampleProvider.Type else {
         return nil
@@ -234,10 +258,19 @@ private func reverseEngineeredExample(for typeToSample: Any.Type, using encoder:
     return try? exampleType.openAPIExample(using: encoder)
 }
 
+/// The context for an OpenAPI path operation.
+/// - Parameters:
+///   - summary: The summary of the path operation, if any.
+///   - description: The longer description of the path operation, if any,
+///   - tags: Any tags the path operation can have.
 typealias PartialPathOperationContext = (
     summary: String?,
     description: String?,
     tags: [String]?
 )
 
-typealias PathOperationConstructor = (PartialPathOperationContext) -> (path: OpenAPI.Path, verb: OpenAPI.HttpMethod, operation: OpenAPI.Operation)
+/// A function that takes a `PartialPathOperationContext` and returns a `PathOperation`.
+typealias PathOperationConstructor = (PartialPathOperationContext) -> PathOperation
+
+/// A tuple containing a path, verb, and operation.
+typealias PathOperation = (path: OpenAPI.Path, verb: OpenAPI.HttpMethod, operation: OpenAPI.Operation)

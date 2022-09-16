@@ -19,16 +19,38 @@ final class VaporOpenAPITests: XCTestCase {
         app.delete("hello", use: TestController.deleteRoute)
         app.post("hello", "empty", use: TestController.createEmptyReturn)
 
+        try testRoutes(on: app)
+    }
+
+    func testAsyncExample() throws {
+        let app = Application(.testing)
+        defer { app.shutdown() }
+
+        let route = app.get("hello", use: AsyncTestController.indexRoute)
+        app.post("hello", use: AsyncTestController.createRoute)
+        app.get(
+            "hello",
+            ":id".parameterType(Int.self).description("hello world"),
+            use: AsyncTestController.showRoute
+        )
+        app.delete("hello", use: AsyncTestController.deleteRoute)
+        app.post("hello", "empty", use: AsyncTestController.createEmptyReturn)
+
+        try testRoutes(on: app)
+    }
+
+    /// Just the route-checking bits in their own function so we can test out EventLoopFuture handling and async/await cleanly.
+    func testRoutes(on app: Application) throws {
         // TODO: Add support for ContentEncoder to JSONAPIOpenAPI
         let jsonEncoder = JSONEncoder()
         if #available(macOS 10.12, *) {
             jsonEncoder.dateEncodingStrategy = .iso8601
             jsonEncoder.outputFormatting = .sortedKeys
         }
-        #if os(Linux)
+#if os(Linux)
         jsonEncoder.dateEncodingStrategy = .iso8601
         jsonEncoder.outputFormatting = .sortedKeys
-        #endif
+#endif
 
         let info = OpenAPI.Document.Info(
             title: "Vapor OpenAPI Test API",
@@ -75,10 +97,14 @@ This text supports _markdown_!
         XCTAssertNil(document.paths["/hello"]?.trace)
         XCTAssertNotNil(document.paths["/hello/{id}"]?.get)
 
+        let problematicPath = document.paths["/hello"]!
+        let problematicOperation = problematicPath.get!
+        let problematicResponses = problematicOperation.responses
+
         XCTAssertNotNil(document.paths["/hello"]?.get?.responses[.status(code: 200)])
         XCTAssertNotNil(document.paths["/hello"]?.get?.responses[.status(code: 400)])
         XCTAssertNotNil(document.paths["/hello"]?.delete?.responses[.status(code: 204)])
-        
+
         XCTAssertNotNil(document.paths["/hello/empty"]?.post?.responses[.status(code: 201)])
 
         XCTAssertEqual(document.paths["/hello/{id}"]?.get?.parameters[0].parameterValue?.description, "hello world")
@@ -237,5 +263,39 @@ final class TestController {
     
     static func createEmptyReturn(_ req: TypedRequest<TestCreateEmptyReturnRouteContext>) -> EventLoopFuture<Response> {
         return req.response.success.encodeEmptyResponse()
+    }
+}
+
+final class AsyncTestController {
+    static func indexRoute(_ req: TypedRequest<TestIndexRouteContext>) async throws -> Response {
+        if let text = req.query.echo {
+            return try await req.response.success.encode("\(text)")
+        }
+        return try await req.response.success.encode("Hello")
+    }
+
+    static func showRoute(_ req: TypedRequest<TestShowRouteContext>) async throws -> Response {
+        if req.query.badQuery != nil {
+            return try await req.response.get(\.badRequest)
+        }
+        if let text = req.query.echo {
+            return try await req.response.success.encode("\(text)")
+        }
+        return try await req.response.success.encode("Hello")
+    }
+
+    static func createRoute(_ req: TypedRequest<TestCreateRouteContext>) async throws -> Response {
+        if req.query.badQuery != nil {
+            return try await req.response.get(\.badRequest)
+        }
+        return try await req.response.success.encode("Hello")
+    }
+
+    static func deleteRoute(_ req: TypedRequest<TestDeleteRouteContext>) async throws -> Response {
+        return try await req.response.success.encodeEmptyResponse()
+    }
+
+    static func createEmptyReturn(_ req: TypedRequest<TestCreateEmptyReturnRouteContext>) async throws -> Response {
+        return try await req.response.success.encodeEmptyResponse()
     }
 }

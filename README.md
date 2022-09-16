@@ -6,8 +6,33 @@ See https://github.com/mattpolzin/VaporOpenAPIExample for an example of a simple
 
 You use `VaporTypedRoutes.TypedRequest` instead of `Vapor.Request` to form a request context that can be used to built out an OpenAPI description. You use custom methods to attach your routes to the app. These methods mirror the methods available in Vapor already.
 
-```swift
+You can use the library like this with Swift Concurrency:
 
+```swift
+enum WidgetController {
+    struct ShowRoute: RouteContext {
+        ...
+    }
+    
+    static func show(_ req: TypedRequest<ShowRoute>) try await -> Response {
+        ...
+    }
+}
+
+func routes(_ app: Application) {
+    app.get(
+        "widgets",
+        ":type".description("The type of widget"),
+        ":id".parameterType(Int.self),
+        use: WidgetController.show 
+    ).tags("Widgets")
+      .summary("Get a widget")
+}
+```
+
+...and like this with a NIO EventLoopFuture:
+
+```swift
 enum WidgetController {
     struct ShowRoute: RouteContext {
         ...
