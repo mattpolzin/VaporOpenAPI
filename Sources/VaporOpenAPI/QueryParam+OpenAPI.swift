@@ -9,7 +9,7 @@ import OpenAPIKit
 
 /// A protocol for OpenAPI Arrays.
 protocol _Array {
-	/// The type of element in the array.
+    /// The type of element in the array.
     static var elementType: Any.Type { get }
 }
 extension Array: _Array {
@@ -28,11 +28,11 @@ extension Dictionary: _Dictionary {
 }
 
 extension AbstractQueryParam {
-	/// Get the equivalent OpenAPI parameter for the query param.
+    /// Get the equivalent OpenAPI parameter for the query param.
     public func openAPIQueryParam() -> OpenAPI.Parameter {
         let schema: OpenAPI.Parameter.SchemaContext
 
-		/// Guess the equivalent JSON Schema type for a given Swift type.
+        /// Guess the equivalent JSON Schema type for a given Swift type.
         func guessJsonSchema(for type: Any.Type) -> JSONSchema {
             guard let schemaType = type as? OpenAPISchemaType.Type else {
                     return .string

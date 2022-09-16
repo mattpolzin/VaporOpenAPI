@@ -13,7 +13,7 @@ import Sampleable
 
 /// Types that contain wrapped values (for OpenAPI conversion).
 protocol _Wrapper {
-	/// The wrapped type.
+    /// The wrapped type.
     static var wrappedType: Any.Type { get }
 }
 
@@ -24,10 +24,10 @@ extension Optional: _Wrapper {
 }
 
 extension AbstractRouteContext {
-	/// The OpenAPI equivalents of any responses in the route context.
-	/// - Parameters:
-	///  - encoder: The JSON encoder to use to generate the responses.
-	/// - Returns: A `Response.Map` containing the converted responses.
+    /// The OpenAPI equivalents of any responses in the route context.
+    /// - Parameters:
+    ///  - encoder: The JSON encoder to use to generate the responses.
+    /// - Returns: A `Response.Map` containing the converted responses.
     public static func openAPIResponses(using encoder: JSONEncoder) throws -> OpenAPI.Response.Map {
         let responseTuples = try responseBodyTuples
             .compactMap { responseTuple -> (OpenAPI.Response.StatusCode, OpenAPI.Response)? in
@@ -110,9 +110,9 @@ extension AbstractRouteContext {
 }
 
 extension Vapor.Route {
-	/// Generates the constructor for an OpenAPI `PathOperation` equivalent to the Vapor `Route`.
-	/// - Parameters:
-	///   - encoder: The JSON encoder to generate the `PathOperationConstructor` with.
+    /// Generates the constructor for an OpenAPI `PathOperation` equivalent to the Vapor `Route`.
+    /// - Parameters:
+    ///   - encoder: The JSON encoder to generate the `PathOperationConstructor` with.
     func openAPIPathOperationConstructor(using encoder: JSONEncoder) throws -> PathOperationConstructor {
         let pathComponents = try OpenAPI.Path(
             path.map { try $0.openAPIPathComponent() }
@@ -152,9 +152,9 @@ extension Vapor.Route {
         }
     }
 
-	/// Generates an OpenAPI `PathOperation` equivalent to the Vapor `Route`.
-	/// - Parameters:
-	///   - encoder: The JSON encoder to generate the `PathOperation` with.
+    /// Generates an OpenAPI `PathOperation` equivalent to the Vapor `Route`.
+    /// - Parameters:
+    ///   - encoder: The JSON encoder to generate the `PathOperation` with.
     func openAPIPathOperation(using encoder: JSONEncoder) throws -> PathOperation {
         let operation = try openAPIPathOperationConstructor(using: encoder)
 
@@ -171,9 +171,9 @@ extension Vapor.Route {
         )
     }
 
-	/// Generates an array of OpenAPI parameters equivalent to the query params in the given response's body type.
-	/// - Parameters:
-	///   - responseType: The type of response to get the query parameters from. Must be an `AbstractRouteContext` to extract query parameters.
+    /// Generates an array of OpenAPI parameters equivalent to the query params in the given response's body type.
+    /// - Parameters:
+    ///   - responseType: The type of response to get the query parameters from. Must be an `AbstractRouteContext` to extract query parameters.
     private func openAPIQueryParams(from responseType: Any.Type) -> [OpenAPI.Parameter] {
         if let responseBodyType = responseType as? AbstractRouteContext.Type {
             return responseBodyType
@@ -184,10 +184,10 @@ extension Vapor.Route {
         return []
     }
 
-	/// Generates the equivalent OpenAPI request for a given request type.
-	/// - Parameters:
-	///   - requestType: The request body type to convert.
-	///   - encoder: The JSON encoder to generate the OpenAPI request with.
+    /// Generates the equivalent OpenAPI request for a given request type.
+    /// - Parameters:
+    ///   - requestType: The request body type to convert.
+    ///   - encoder: The JSON encoder to generate the OpenAPI request with.
     private func openAPIRequest(for requestType: Any.Type, using encoder: JSONEncoder) throws -> OpenAPI.Request? {
         guard !(requestType is EmptyRequestBody.Type) else {
             return nil
@@ -211,10 +211,10 @@ extension Vapor.Route {
         )
     }
 
-	/// Generates the equivalent OpenAPI request for a given request type.
-	/// - Parameters:
-	///   - responseType: The response type to convert. If it conforms to `AbstractRouteContext`, this function will use all included responses.
-	///   - encoder: The JSON encoder to generate the OpenAPI response map with.
+    /// Generates the equivalent OpenAPI request for a given request type.
+    /// - Parameters:
+    ///   - responseType: The response type to convert. If it conforms to `AbstractRouteContext`, this function will use all included responses.
+    ///   - encoder: The JSON encoder to generate the OpenAPI response map with.
     private func openAPIResponses(from responseType: Any.Type, using encoder: JSONEncoder) throws -> OpenAPI.Response.Map {
         if let responseBodyType = responseType as? AbstractRouteContext.Type {
             return try responseBodyType.openAPIResponses(using: encoder)

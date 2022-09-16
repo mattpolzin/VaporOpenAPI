@@ -10,7 +10,7 @@ import VaporTypedRoutes
 import OpenAPIKit
 
 extension Vapor.PathComponent {
-	/// The OpenAPI equivalent of the path component's name.
+    /// The OpenAPI equivalent of the path component's name.
     internal func openAPIPathComponent() throws -> String {
         switch self {
         case .constant(let val):
@@ -23,7 +23,7 @@ extension Vapor.PathComponent {
         }
     }
 
-	/// The OpenAPI equivalent of the path parameter (including a type, if specified).
+    /// The OpenAPI equivalent of the path parameter (including a type, if specified).
     internal func openAPIPathParameter(in route: Vapor.Route) -> OpenAPI.Parameter? {
         switch self {
         case .parameter(let name):
@@ -40,7 +40,7 @@ extension Vapor.PathComponent {
         }
     }
 
-	/// Errors that can arise with the conversion from Vapor path component to the OpenAPI equivalent.
+    /// Errors that can arise with the conversion from Vapor path component to the OpenAPI equivalent.
     enum OpenAPIPathComponentError: Swift.Error {
         case unsupportedPathComponent(String)
     }

@@ -9,7 +9,7 @@ final class VaporOpenAPITests: XCTestCase {
         let app = Application(.testing)
         defer { app.shutdown() }
 
-		app.get("hello", use: TestController.indexRoute)
+        app.get("hello", use: TestController.indexRoute)
         app.post("hello", use: TestController.createRoute)
         app.get(
             "hello",
@@ -22,102 +22,102 @@ final class VaporOpenAPITests: XCTestCase {
         try testRoutes(on: app)
     }
 
-	func testAsyncExample() throws {
-		let app = Application(.testing)
-		defer { app.shutdown() }
+    func testAsyncExample() throws {
+        let app = Application(.testing)
+        defer { app.shutdown() }
 
-		let route = app.get("hello", use: AsyncTestController.indexRoute)
-		app.post("hello", use: AsyncTestController.createRoute)
-		app.get(
-			"hello",
-			":id".parameterType(Int.self).description("hello world"),
-			use: AsyncTestController.showRoute
-		)
-		app.delete("hello", use: AsyncTestController.deleteRoute)
-		app.post("hello", "empty", use: AsyncTestController.createEmptyReturn)
+        let route = app.get("hello", use: AsyncTestController.indexRoute)
+        app.post("hello", use: AsyncTestController.createRoute)
+        app.get(
+            "hello",
+            ":id".parameterType(Int.self).description("hello world"),
+            use: AsyncTestController.showRoute
+        )
+        app.delete("hello", use: AsyncTestController.deleteRoute)
+        app.post("hello", "empty", use: AsyncTestController.createEmptyReturn)
 
-		try testRoutes(on: app)
-	}
+        try testRoutes(on: app)
+    }
 
-	/// Just the route-checking bits in their own function so we can test out EventLoopFuture handling and async/await cleanly.
-	func testRoutes(on app: Application) throws {
-		// TODO: Add support for ContentEncoder to JSONAPIOpenAPI
-		let jsonEncoder = JSONEncoder()
-		if #available(macOS 10.12, *) {
-			jsonEncoder.dateEncodingStrategy = .iso8601
-			jsonEncoder.outputFormatting = .sortedKeys
-		}
+    /// Just the route-checking bits in their own function so we can test out EventLoopFuture handling and async/await cleanly.
+    func testRoutes(on app: Application) throws {
+        // TODO: Add support for ContentEncoder to JSONAPIOpenAPI
+        let jsonEncoder = JSONEncoder()
+        if #available(macOS 10.12, *) {
+            jsonEncoder.dateEncodingStrategy = .iso8601
+            jsonEncoder.outputFormatting = .sortedKeys
+        }
 #if os(Linux)
-		jsonEncoder.dateEncodingStrategy = .iso8601
-		jsonEncoder.outputFormatting = .sortedKeys
+        jsonEncoder.dateEncodingStrategy = .iso8601
+        jsonEncoder.outputFormatting = .sortedKeys
 #endif
 
-		let info = OpenAPI.Document.Info(
-			title: "Vapor OpenAPI Test API",
-			description:
+        let info = OpenAPI.Document.Info(
+            title: "Vapor OpenAPI Test API",
+            description:
 """
 ## Descriptive Text
 This text supports _markdown_!
 """,
-			version: "1.0"
-		)
+            version: "1.0"
+        )
 
-		// TODO: get hostname & port from environment
-		let servers = [
-			OpenAPI.Server(url: URL(string: "http://localhost")!)
-		]
+        // TODO: get hostname & port from environment
+        let servers = [
+            OpenAPI.Server(url: URL(string: "http://localhost")!)
+        ]
 
-		let components = OpenAPI.Components(
-			schemas: [:],
-			responses: [:],
-			parameters: [:],
-			examples: [:],
-			requestBodies: [:],
-			headers: [:]
-		)
+        let components = OpenAPI.Components(
+            schemas: [:],
+            responses: [:],
+            parameters: [:],
+            examples: [:],
+            requestBodies: [:],
+            headers: [:]
+        )
 
-		let paths = try app.routes.openAPIPathItems(using: jsonEncoder)
+        let paths = try app.routes.openAPIPathItems(using: jsonEncoder)
 
-		let document = OpenAPI.Document(
-			info: info,
-			servers: servers,
-			paths: paths,
-			components: components,
-			security: []
-		)
+        let document = OpenAPI.Document(
+            info: info,
+            servers: servers,
+            paths: paths,
+            components: components,
+            security: []
+        )
 
-		XCTAssertEqual(document.paths.count, 3)
-		XCTAssertNotNil(document.paths["/hello"]?.get)
-		XCTAssertNotNil(document.paths["/hello"]?.post)
-		XCTAssertNotNil(document.paths["/hello"]?.delete)
-		XCTAssertNil(document.paths["/hello"]?.put)
-		XCTAssertNil(document.paths["/hello"]?.patch)
-		XCTAssertNil(document.paths["/hello"]?.head)
-		XCTAssertNil(document.paths["/hello"]?.options)
-		XCTAssertNil(document.paths["/hello"]?.trace)
-		XCTAssertNotNil(document.paths["/hello/{id}"]?.get)
+        XCTAssertEqual(document.paths.count, 3)
+        XCTAssertNotNil(document.paths["/hello"]?.get)
+        XCTAssertNotNil(document.paths["/hello"]?.post)
+        XCTAssertNotNil(document.paths["/hello"]?.delete)
+        XCTAssertNil(document.paths["/hello"]?.put)
+        XCTAssertNil(document.paths["/hello"]?.patch)
+        XCTAssertNil(document.paths["/hello"]?.head)
+        XCTAssertNil(document.paths["/hello"]?.options)
+        XCTAssertNil(document.paths["/hello"]?.trace)
+        XCTAssertNotNil(document.paths["/hello/{id}"]?.get)
 
-		let problematicPath = document.paths["/hello"]!
-		let problematicOperation = problematicPath.get!
-		let problematicResponses = problematicOperation.responses
+        let problematicPath = document.paths["/hello"]!
+        let problematicOperation = problematicPath.get!
+        let problematicResponses = problematicOperation.responses
 
-		XCTAssertNotNil(document.paths["/hello"]?.get?.responses[.status(code: 200)])
-		XCTAssertNotNil(document.paths["/hello"]?.get?.responses[.status(code: 400)])
-		XCTAssertNotNil(document.paths["/hello"]?.delete?.responses[.status(code: 204)])
+        XCTAssertNotNil(document.paths["/hello"]?.get?.responses[.status(code: 200)])
+        XCTAssertNotNil(document.paths["/hello"]?.get?.responses[.status(code: 400)])
+        XCTAssertNotNil(document.paths["/hello"]?.delete?.responses[.status(code: 204)])
 
-		XCTAssertNotNil(document.paths["/hello/empty"]?.post?.responses[.status(code: 201)])
+        XCTAssertNotNil(document.paths["/hello/empty"]?.post?.responses[.status(code: 201)])
 
-		XCTAssertEqual(document.paths["/hello/{id}"]?.get?.parameters[0].parameterValue?.description, "hello world")
-		XCTAssertEqual(document.paths["/hello/{id}"]?.get?.parameters[0].parameterValue?.schemaOrContent.schemaValue, .integer)
+        XCTAssertEqual(document.paths["/hello/{id}"]?.get?.parameters[0].parameterValue?.description, "hello world")
+        XCTAssertEqual(document.paths["/hello/{id}"]?.get?.parameters[0].parameterValue?.schemaOrContent.schemaValue, .integer)
 
-		let requestExample = document.paths["/hello"]?.post?.requestBody?.b?.content[.json]?.example
-		XCTAssertNotNil(requestExample)
-		XCTAssertNotNil(document.paths["/hello"]?.post?.responses[.status(code: 201)])
-		let requestExampleDict = requestExample?.value as? [String: Any]
-		XCTAssertNotNil(requestExampleDict, "Expected request example to decode as a dictionary from String to Any")
+        let requestExample = document.paths["/hello"]?.post?.requestBody?.b?.content[.json]?.example
+        XCTAssertNotNil(requestExample)
+        XCTAssertNotNil(document.paths["/hello"]?.post?.responses[.status(code: 201)])
+        let requestExampleDict = requestExample?.value as? [String: Any]
+        XCTAssertNotNil(requestExampleDict, "Expected request example to decode as a dictionary from String to Any")
 
-		XCTAssertEqual(requestExampleDict?["stringValue"] as? String, "hello world!")
-	}
+        XCTAssertEqual(requestExampleDict?["stringValue"] as? String, "hello world!")
+    }
 }
 
 struct CreatableResource: Codable, Sampleable, OpenAPIExampleProvider {
@@ -267,35 +267,35 @@ final class TestController {
 }
 
 final class AsyncTestController {
-	static func indexRoute(_ req: TypedRequest<TestIndexRouteContext>) async throws -> Response {
-		if let text = req.query.echo {
-			return try await req.response.success.encode("\(text)")
-		}
-		return try await req.response.success.encode("Hello")
-	}
+    static func indexRoute(_ req: TypedRequest<TestIndexRouteContext>) async throws -> Response {
+        if let text = req.query.echo {
+            return try await req.response.success.encode("\(text)")
+        }
+        return try await req.response.success.encode("Hello")
+    }
 
-	static func showRoute(_ req: TypedRequest<TestShowRouteContext>) async throws -> Response {
-		if req.query.badQuery != nil {
-			return try await req.response.get(\.badRequest)
-		}
-		if let text = req.query.echo {
-			return try await req.response.success.encode("\(text)")
-		}
-		return try await req.response.success.encode("Hello")
-	}
+    static func showRoute(_ req: TypedRequest<TestShowRouteContext>) async throws -> Response {
+        if req.query.badQuery != nil {
+            return try await req.response.get(\.badRequest)
+        }
+        if let text = req.query.echo {
+            return try await req.response.success.encode("\(text)")
+        }
+        return try await req.response.success.encode("Hello")
+    }
 
-	static func createRoute(_ req: TypedRequest<TestCreateRouteContext>) async throws -> Response {
-		if req.query.badQuery != nil {
-			return try await req.response.get(\.badRequest)
-		}
-		return try await req.response.success.encode("Hello")
-	}
+    static func createRoute(_ req: TypedRequest<TestCreateRouteContext>) async throws -> Response {
+        if req.query.badQuery != nil {
+            return try await req.response.get(\.badRequest)
+        }
+        return try await req.response.success.encode("Hello")
+    }
 
-	static func deleteRoute(_ req: TypedRequest<TestDeleteRouteContext>) async throws -> Response {
-		return try await req.response.success.encodeEmptyResponse()
-	}
+    static func deleteRoute(_ req: TypedRequest<TestDeleteRouteContext>) async throws -> Response {
+        return try await req.response.success.encodeEmptyResponse()
+    }
 
-	static func createEmptyReturn(_ req: TypedRequest<TestCreateEmptyReturnRouteContext>) async throws -> Response {
-		return try await req.response.success.encodeEmptyResponse()
-	}
+    static func createEmptyReturn(_ req: TypedRequest<TestCreateEmptyReturnRouteContext>) async throws -> Response {
+        return try await req.response.success.encodeEmptyResponse()
+    }
 }
