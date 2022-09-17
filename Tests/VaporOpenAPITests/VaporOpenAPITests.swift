@@ -51,9 +51,10 @@ This text supports _markdown_!
             version: "1.0"
         )
 
-        // TODO: get hostname & port from environment
+        let portString = "\(app.http.server.configuration.port == 80 ? "" : ":\(app.http.server.configuration.port)")"
+
         let servers = [
-            OpenAPI.Server(url: URL(string: "http://localhost")!)
+            OpenAPI.Server(url: URL(string: "http://\(app.http.server.configuration.hostname)\(portString)")!)
         ]
 
         let components = OpenAPI.Components(
