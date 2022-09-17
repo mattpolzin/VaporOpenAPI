@@ -26,7 +26,7 @@ final class VaporOpenAPITests: XCTestCase {
         let app = Application(.testing)
         defer { app.shutdown() }
 
-        let route = app.get("hello", use: AsyncTestController.indexRoute)
+        app.get("hello", use: AsyncTestController.indexRoute)
         app.post("hello", use: AsyncTestController.createRoute)
         app.get(
             "hello",
@@ -85,10 +85,6 @@ This text supports _markdown_!
         XCTAssertNil(document.paths["/hello"]?.options)
         XCTAssertNil(document.paths["/hello"]?.trace)
         XCTAssertNotNil(document.paths["/hello/{id}"]?.get)
-
-        let problematicPath = document.paths["/hello"]!
-        let problematicOperation = problematicPath.get!
-        let problematicResponses = problematicOperation.responses
 
         XCTAssertNotNil(document.paths["/hello"]?.get?.responses[.status(code: 200)])
         XCTAssertNotNil(document.paths["/hello"]?.get?.responses[.status(code: 400)])

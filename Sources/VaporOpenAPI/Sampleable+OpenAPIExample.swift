@@ -13,6 +13,8 @@ import Sampleable
 /// Types that provide an example for the OpenAPI definition.
 public protocol OpenAPIExampleProvider: OpenAPIEncodedSchemaType {
     /// The example for the OpenAPI schema.
+    /// - Parameters:
+    ///   - encoder: The encoder to use to generate the OpenAPI example with.
     static func openAPIExample(using encoder: JSONEncoder) throws -> AnyCodable?
 }
 
