@@ -22,7 +22,7 @@ public protocol OpenAPIExampleProvider: OpenAPIEncodedSchemaType {
 extension OpenAPIExampleProvider where Self: Encodable, Self: Sampleable {
     /// The example for the OpenAPI schema.
     public static func openAPIExample() throws -> AnyCodable? {
-        let encoder = try ContentConfiguration.global.jsonEncoder()
+        let encoder = try ContentConfiguration.global.openAPIJSONEncoder()
 
         return try self.openAPIExample(using: encoder)
     }
@@ -35,7 +35,7 @@ extension OpenAPIExampleProvider where Self: Encodable, Self: Sampleable {
 
     /// Get the OpenAPI schema for the `OpenAPIExampleProvider`.
     public static func openAPISchema() throws -> JSONSchema {
-        let encoder = try ContentConfiguration.global.jsonEncoder()
+        let encoder = try ContentConfiguration.global.openAPIJSONEncoder()
 
         return try self.openAPISchema(using: encoder)
     }

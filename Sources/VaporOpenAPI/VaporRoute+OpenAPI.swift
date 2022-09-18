@@ -27,7 +27,7 @@ extension AbstractRouteContext {
     /// The OpenAPI equivalents of any responses in the route context.
     /// - Returns: A `Response.Map` containing the converted responses.
     public static func openAPIResponses() throws -> OpenAPI.Response.Map {
-        let encoder = try ContentConfiguration.global.jsonEncoder()
+        let encoder = try ContentConfiguration.global.openAPIJSONEncoder()
 
         return try self.openAPIResponses(using: encoder)
     }
@@ -120,7 +120,7 @@ extension AbstractRouteContext {
 extension Vapor.Route {
     /// Generates the constructor for an OpenAPI `PathOperation` equivalent to the Vapor `Route`.
     func openAPIPathOperationConstructor() throws -> PathOperationConstructor {
-        let encoder = try ContentConfiguration.global.jsonEncoder()
+        let encoder = try ContentConfiguration.global.openAPIJSONEncoder()
 
         return try self.openAPIPathOperationConstructor(using: encoder)
     }
@@ -169,7 +169,7 @@ extension Vapor.Route {
 
     /// Generates an OpenAPI `PathOperation` equivalent to the Vapor `Route`.
     func openAPIPathOperation() throws -> PathOperation {
-        let encoder = try ContentConfiguration.global.jsonEncoder()
+        let encoder = try ContentConfiguration.global.openAPIJSONEncoder()
 
         return try self.openAPIPathOperation(using: encoder)
     }
@@ -210,7 +210,7 @@ extension Vapor.Route {
     /// - Parameters:
     ///   - requestType: The request body type to convert.
     func openAPIRequest(for requestType: Any.Type) throws -> OpenAPI.Request? {
-        let encoder = try ContentConfiguration.global.jsonEncoder()
+        let encoder = try ContentConfiguration.global.openAPIJSONEncoder()
 
         return try self.openAPIRequest(for: requestType, using: encoder)
     }
@@ -246,7 +246,7 @@ extension Vapor.Route {
     /// - Parameters:
     ///   - responseType: The response type to convert. If it conforms to `AbstractRouteContext`, this function will use all included responses.
     private func openAPIResponses(from responseType: Any.Type) throws -> OpenAPI.Response.Map {
-        let encoder = try ContentConfiguration.global.jsonEncoder()
+        let encoder = try ContentConfiguration.global.openAPIJSONEncoder()
 
         return try self.openAPIResponses(from: responseType, using: encoder)
     }

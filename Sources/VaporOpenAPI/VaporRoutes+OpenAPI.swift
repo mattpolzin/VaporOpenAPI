@@ -12,7 +12,7 @@ import Vapor
 extension Vapor.Routes {
     /// Generates the equivalent OpenAPI `PathItem` map for the Vapor Routes.
     public func openAPIPathItems() throws -> OpenAPI.PathItem.Map {
-        let encoder = try ContentConfiguration.global.jsonEncoder()
+        let encoder = try ContentConfiguration.global.openAPIJSONEncoder()
 
         return try self.openAPIPathItems(using: encoder)
     }

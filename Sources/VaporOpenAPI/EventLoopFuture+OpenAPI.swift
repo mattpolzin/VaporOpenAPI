@@ -23,7 +23,7 @@ extension EventLoopFuture: OpenAPIEncodedSchemaType where Value: OpenAPIEncodedS
     /// Get the OpenAPISchema for for the value using the ContentConfiguration.
     /// - Returns: A JSONSchema object for the `EventLoopFuture`'s value.
     public static func openAPISchema() throws -> JSONSchema {
-        let encoder = try ContentConfiguration.global.jsonEncoder()
+        let encoder = try ContentConfiguration.global.openAPIJSONEncoder()
 
         return try self.openAPISchema(using: encoder)
     }

@@ -21,4 +21,13 @@ extension ContentConfiguration {
 
         return encoder
     }
+
+    /// The content JSON encoder, but with the settings to encode an OpenAPI schema.
+    func openAPIJSONEncoder() throws -> JSONEncoder {
+        let encoder = try self.jsonEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        encoder.outputFormatting = .sortedKeys
+
+        return encoder
+    }
 }
