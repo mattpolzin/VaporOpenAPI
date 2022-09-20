@@ -26,7 +26,7 @@ final class VaporOpenAPITests: XCTestCase {
         let app = Application(.testing)
         defer { app.shutdown() }
 
-        let route = app.get("hello", use: AsyncTestController.indexRoute)
+        app.get("hello", use: AsyncTestController.indexRoute)
         app.post("hello", use: AsyncTestController.createRoute)
         app.get(
             "hello",
@@ -41,17 +41,6 @@ final class VaporOpenAPITests: XCTestCase {
 
     /// Just the route-checking bits in their own function so we can test out EventLoopFuture handling and async/await cleanly.
     func testRoutes(on app: Application) throws {
-        // TODO: Add support for ContentEncoder to JSONAPIOpenAPI
-        let jsonEncoder = JSONEncoder()
-        if #available(macOS 10.12, *) {
-            jsonEncoder.dateEncodingStrategy = .iso8601
-            jsonEncoder.outputFormatting = .sortedKeys
-        }
-#if os(Linux)
-        jsonEncoder.dateEncodingStrategy = .iso8601
-        jsonEncoder.outputFormatting = .sortedKeys
-#endif
-
         let info = OpenAPI.Document.Info(
             title: "Vapor OpenAPI Test API",
             description:
@@ -62,9 +51,10 @@ This text supports _markdown_!
             version: "1.0"
         )
 
-        // TODO: get hostname & port from environment
+        let portString = "\(app.http.server.configuration.port == 80 ? "" : ":\(app.http.server.configuration.port)")"
+
         let servers = [
-            OpenAPI.Server(url: URL(string: "http://localhost")!)
+            OpenAPI.Server(url: URL(string: "http://\(app.http.server.configuration.hostname)\(portString)")!)
         ]
 
         let components = OpenAPI.Components(
@@ -76,7 +66,7 @@ This text supports _markdown_!
             headers: [:]
         )
 
-        let paths = try app.routes.openAPIPathItems(using: jsonEncoder)
+        let paths = try app.routes.openAPIPathItems()
 
         let document = OpenAPI.Document(
             info: info,
@@ -96,10 +86,6 @@ This text supports _markdown_!
         XCTAssertNil(document.paths["/hello"]?.options)
         XCTAssertNil(document.paths["/hello"]?.trace)
         XCTAssertNotNil(document.paths["/hello/{id}"]?.get)
-
-        let problematicPath = document.paths["/hello"]!
-        let problematicOperation = problematicPath.get!
-        let problematicResponses = problematicOperation.responses
 
         XCTAssertNotNil(document.paths["/hello"]?.get?.responses[.status(code: 200)])
         XCTAssertNotNil(document.paths["/hello"]?.get?.responses[.status(code: 400)])
