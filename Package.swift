@@ -14,7 +14,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/vapor/vapor.git", from: "4.50.0"),
-        .package(url: "https://github.com/mattpolzin/VaporTypedRoutes.git", from: "0.8.0"),
+        .package(url: "https://github.com/TimAEllis/VaporTypedRoutes.git", .branch("main")),
         .package(url: "https://github.com/mattpolzin/OpenAPIKit.git", from: "2.0.0"),
         .package(url: "https://github.com/mattpolzin/OpenAPIReflection.git", from: "1.0.0")
     ],

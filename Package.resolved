@@ -201,11 +201,11 @@
       },
       {
         "package": "VaporTypedRoutes",
-        "repositoryURL": "https://github.com/mattpolzin/VaporTypedRoutes.git",
+        "repositoryURL": "https://github.com/TimAEllis/VaporTypedRoutes.git",
         "state": {
-          "branch": null,
-          "revision": "fcc305353a7289203bb2e05356913993a4b04a6d",
-          "version": "0.8.0"
+          "branch": "main",
+          "revision": "a242f07c708e613bf43a2707aae46f60b551f04c",
+          "version": null
         }
       },
       {
