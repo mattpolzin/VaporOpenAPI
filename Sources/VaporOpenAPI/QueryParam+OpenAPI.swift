@@ -37,7 +37,7 @@ extension AbstractQueryParam {
         /// Guess the equivalent JSON Schema type for a given Swift type.
         func guessJsonSchema(for type: Any.Type) -> JSONSchema {
             guard let schemaType = type as? OpenAPISchemaType.Type else {
-                    return .string
+                return .string
             }
             let ret = schemaType.openAPISchema
             guard let allowedValues = self.allowedValues else {
@@ -77,9 +77,10 @@ extension AbstractQueryParam {
 
         return .init(
             name: name,
-            context: .query,
+            context: .query(required: `required`),
             schema: schema,
-            description: description
+            description: description,
+            deprecated: deprecated
         )
     }
 }
