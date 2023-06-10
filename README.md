@@ -4,7 +4,7 @@ This is currently in early stages of development, not a polished or feature-comp
 
 See https://github.com/mattpolzin/VaporOpenAPIExample for an example of a simple app using this library.
 
-You use `VaporTypedRoutes.TypedRequest` instead of `Vapor.Request` to form a request context that can be used to built out an OpenAPI description. You use custom methods to attach your routes to the app. These methods mirror the methods available in Vapor already.
+You use `VaporTypedRoutes.TypedRequest` instead of `Vapor.Request` to form a request context that can be used to build out an OpenAPI description. You use custom methods to attach your routes to the app. These methods mirror the methods available in Vapor already.
 
 You can use the library like this with Swift Concurrency:
 
