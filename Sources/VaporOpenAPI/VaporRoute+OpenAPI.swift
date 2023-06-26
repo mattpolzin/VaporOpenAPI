@@ -156,6 +156,7 @@ extension Vapor.Route {
                 parameters: parameters.map { .init($0) },
                 requestBody: requestBody,
                 responses: responses,
+                deprecated: context.deprecated,
                 servers: nil
             )
 
@@ -183,12 +184,14 @@ extension Vapor.Route {
         let summary = userInfo["openapi:summary"] as? String
         let description = userInfo["description"] as? String
         let tags = userInfo["openapi:tags"] as? [String]
+        let deprecated = userInfo["openapi:deprecated"] as? Bool ?? false
 
         return operation(
             (
                 summary: summary,
                 description: description,
-                tags: tags
+                tags: tags,
+                deprecated: deprecated
             )
         )
     }
@@ -301,12 +304,14 @@ private func reverseEngineeredExample(for typeToSample: Any.Type, using encoder:
 /// The context for an OpenAPI path operation.
 /// - Parameters:
 ///   - summary: The summary of the path operation, if any.
-///   - description: The longer description of the path operation, if any,
+///   - description: The longer description of the path operation, if any.
 ///   - tags: Any tags the path operation can have.
+///   - deprecated: If `true`, then it marks the path operation as deprecated.
 typealias PartialPathOperationContext = (
     summary: String?,
     description: String?,
-    tags: [String]?
+    tags: [String]?,
+    deprecated: Bool
 )
 
 /// A function that takes a `PartialPathOperationContext` and returns a `PathOperation`.

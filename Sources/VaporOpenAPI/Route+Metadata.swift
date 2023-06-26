@@ -39,4 +39,11 @@ extension Route {
         userInfo["openapi:tags"] = tags
         return self
     }
+    
+    /// Add OpenAPI-compatible deprecation notice to the route.
+    @discardableResult
+    public func deprecated() -> Route {
+        userInfo["openapi:deprecated"] = true
+        return self
+    }
 }
