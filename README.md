@@ -1,6 +1,8 @@
 # VaporOpenAPI
 
-This is currently in early stages of development, not a polished or feature-complete API by a long stretch.
+This is more of a prototype of a library, not a polished or feature-complete API by a long stretch. That said, folks have found it useful and I certainly encourage you to PR fixes and improvements if you also find this library useful!
+
+As of the release of OpenAPIKit v3.0.0, this library will produce OpenAPI v3.1 compatible documents instead of OpenAPI v3.0 compatible documents.
 
 See https://github.com/mattpolzin/VaporOpenAPIExample for an example of a simple app using this library.
 
