@@ -36,7 +36,7 @@ extension Vapor.Routes {
                 pathItem[item.verb] = item.operation
             }
 
-            return pathItem
+            return .pathItem(pathItem)
         }
     }
 }
