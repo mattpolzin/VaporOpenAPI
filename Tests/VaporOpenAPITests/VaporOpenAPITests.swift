@@ -77,28 +77,28 @@ This text supports _markdown_!
         )
 
         XCTAssertEqual(document.paths.count, 3)
-        XCTAssertNotNil(document.paths["/hello"]?.get)
-        XCTAssertNotNil(document.paths["/hello"]?.post)
-        XCTAssertNotNil(document.paths["/hello"]?.delete)
-        XCTAssertNil(document.paths["/hello"]?.put)
-        XCTAssertNil(document.paths["/hello"]?.patch)
-        XCTAssertNil(document.paths["/hello"]?.head)
-        XCTAssertNil(document.paths["/hello"]?.options)
-        XCTAssertNil(document.paths["/hello"]?.trace)
-        XCTAssertNotNil(document.paths["/hello/{id}"]?.get)
+        XCTAssertNotNil(document.paths["/hello"]?.pathItemValue?.get)
+        XCTAssertNotNil(document.paths["/hello"]?.pathItemValue?.post)
+        XCTAssertNotNil(document.paths["/hello"]?.pathItemValue?.delete)
+        XCTAssertNil(document.paths["/hello"]?.pathItemValue?.put)
+        XCTAssertNil(document.paths["/hello"]?.pathItemValue?.patch)
+        XCTAssertNil(document.paths["/hello"]?.pathItemValue?.head)
+        XCTAssertNil(document.paths["/hello"]?.pathItemValue?.options)
+        XCTAssertNil(document.paths["/hello"]?.pathItemValue?.trace)
+        XCTAssertNotNil(document.paths["/hello/{id}"]?.pathItemValue?.get)
 
-        XCTAssertNotNil(document.paths["/hello"]?.get?.responses[.status(code: 200)])
-        XCTAssertNotNil(document.paths["/hello"]?.get?.responses[.status(code: 400)])
-        XCTAssertNotNil(document.paths["/hello"]?.delete?.responses[.status(code: 204)])
+        XCTAssertNotNil(document.paths["/hello"]?.pathItemValue?.get?.responses[.status(code: 200)])
+        XCTAssertNotNil(document.paths["/hello"]?.pathItemValue?.get?.responses[.status(code: 400)])
+        XCTAssertNotNil(document.paths["/hello"]?.pathItemValue?.delete?.responses[.status(code: 204)])
 
-        XCTAssertNotNil(document.paths["/hello/empty"]?.post?.responses[.status(code: 201)])
+        XCTAssertNotNil(document.paths["/hello/empty"]?.pathItemValue?.post?.responses[.status(code: 201)])
 
-        XCTAssertEqual(document.paths["/hello/{id}"]?.get?.parameters[0].parameterValue?.description, "hello world")
-        XCTAssertEqual(document.paths["/hello/{id}"]?.get?.parameters[0].parameterValue?.schemaOrContent.schemaValue, .integer)
+        XCTAssertEqual(document.paths["/hello/{id}"]?.pathItemValue?.get?.parameters[0].parameterValue?.description, "hello world")
+        XCTAssertEqual(document.paths["/hello/{id}"]?.pathItemValue?.get?.parameters[0].parameterValue?.schemaOrContent.schemaValue, .integer)
 
-        let requestExample = document.paths["/hello"]?.post?.requestBody?.b?.content[.json]?.example
+        let requestExample = document.paths["/hello"]?.pathItemValue?.post?.requestBody?.b?.content[.json]?.example
         XCTAssertNotNil(requestExample)
-        XCTAssertNotNil(document.paths["/hello"]?.post?.responses[.status(code: 201)])
+        XCTAssertNotNil(document.paths["/hello"]?.pathItemValue?.post?.responses[.status(code: 201)])
         let requestExampleDict = requestExample?.value as? [String: Any]
         XCTAssertNotNil(requestExampleDict, "Expected request example to decode as a dictionary from String to Any")
 
