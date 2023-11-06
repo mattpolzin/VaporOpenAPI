@@ -100,7 +100,7 @@ extension AbstractRouteContext {
                 if stringLikeTypes.contains(contentType) {
                     schema = .string
                 } else if binaryLikeTypes.contains(contentType) {
-                    schema = .string(format: .binary)
+                    schema = .string(contentEncoding: .binary)
                 } else {
                     schema = .string
                 }
