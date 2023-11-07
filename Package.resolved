@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/console-kit.git",
       "state" : {
-        "revision" : "dcaea6c7f6e29d3ffb80975b24319af85c0afef0",
-        "version" : "4.8.0"
+        "revision" : "f4ef965dadd999f7e4687053153c97b8b320819c",
+        "version" : "4.10.1"
       }
     },
     {
@@ -158,8 +158,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-nio-http2.git",
       "state" : {
-        "revision" : "a8ccf13fa62775277a5d56844878c828bbb3be1a",
-        "version" : "1.27.0"
+        "revision" : "9c22e4f810ce780453f563fba98e1a1039f83d56",
+        "version" : "1.28.1"
       }
     },
     {
@@ -194,8 +194,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/vapor.git",
       "state" : {
-        "revision" : "1f2b44b1739ff5cdec6c6dfec40020f5d4b2a813",
-        "version" : "4.83.2"
+        "revision" : "3744d4200c9293584603d650f8ef70ae7e6896e7",
+        "version" : "4.86.0"
       }
     },
     {
@@ -203,8 +203,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mattpolzin/VaporTypedRoutes.git",
       "state" : {
-        "revision" : "e8015627a2def1b641ceba9d605972a40eeff309",
-        "version" : "0.9.0"
+        "revision" : "f28103ae5a8124dfb8b2386460e7ff8b0dd9aef7",
+        "version" : "0.10.0"
       }
     },
     {
