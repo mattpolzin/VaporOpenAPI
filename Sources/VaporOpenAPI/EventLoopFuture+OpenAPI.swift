@@ -11,7 +11,7 @@ import OpenAPIKit
 import OpenAPIReflection
 import Vapor
 
-extension EventLoopFuture: OpenAPIEncodedSchemaType where Value: OpenAPIEncodedSchemaType {
+extension EventLoopFuture: @retroactive OpenAPIEncodedSchemaType where Value: OpenAPIEncodedSchemaType {
     /// Get the OpenAPISchema for for the value using a given encoder.
     /// - Parameters:
     ///   - encoder: The JSONEncoder to encode the schema with.
