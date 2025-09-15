@@ -326,4 +326,4 @@ typealias PathOperationConstructor = (PartialPathOperationContext) -> PathOperat
 typealias PathOperation = (path: OpenAPI.Path, verb: OpenAPI.HttpMethod, operation: OpenAPI.Operation)
 
 
-extension OpenAPI.Document: Content { }
+extension OpenAPI.Document: @retroactive Content { }
