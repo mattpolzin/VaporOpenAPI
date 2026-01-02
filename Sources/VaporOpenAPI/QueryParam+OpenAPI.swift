@@ -2,8 +2,6 @@
 //  QueryParam+OpenAPI.swift
 //  AppAPIDocumentation
 //
-//  Created by Mathew Polzin on 12/8/19.
-//
 
 import OpenAPIKit
 
@@ -75,10 +73,10 @@ extension AbstractQueryParam {
             explode: explode
         )
 
-        return .init(
+        return .query(
             name: name,
-            context: .query(required: `required`),
-            schema: schema,
+            required: `required`,
+            schemaOrContent: .schema(schema),
             description: description,
             deprecated: deprecated
         )

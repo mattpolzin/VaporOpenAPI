@@ -5,9 +5,8 @@ import Sampleable
 import XCTVapor
 
 final class VaporOpenAPITests: XCTestCase {
-    func testExample() throws {
-        let app = Application(.testing)
-        defer { app.shutdown() }
+    func testExample() async throws {
+        let app = try await Application.make(.testing)
 
         app.get("hello", use: TestController.indexRoute)
         app.post("hello", use: TestController.createRoute)
@@ -20,11 +19,12 @@ final class VaporOpenAPITests: XCTestCase {
         app.post("hello", "empty", use: TestController.createEmptyReturn)
 
         try testRoutes(on: app)
+
+        try await app.asyncShutdown()
     }
 
-    func testAsyncExample() throws {
-        let app = Application(.testing)
-        defer { app.shutdown() }
+    func testAsyncExample() async throws {
+        let app = try await Application.make(.testing)
 
         app.get("hello", use: AsyncTestController.indexRoute)
         app.post("hello", use: AsyncTestController.createRoute)
@@ -37,6 +37,8 @@ final class VaporOpenAPITests: XCTestCase {
         app.post("hello", "empty", use: AsyncTestController.createEmptyReturn)
 
         try testRoutes(on: app)
+
+        try await app.asyncShutdown()
     }
 
     /// Just the route-checking bits in their own function so we can test out EventLoopFuture handling and async/await cleanly.
@@ -96,7 +98,8 @@ This text supports _markdown_!
         XCTAssertEqual(document.paths["/hello/{id}"]?.pathItemValue?.get?.parameters[0].parameterValue?.description, "hello world")
         XCTAssertEqual(document.paths["/hello/{id}"]?.pathItemValue?.get?.parameters[0].parameterValue?.schemaOrContent.schemaValue, .integer)
 
-        let requestExample = document.paths["/hello"]?.pathItemValue?.post?.requestBody?.b?.content[.json]?.example
+        let requestExample =
+        document.paths["/hello"]?.pathItemValue?.post?.requestBody?.b?.content[.json]?.contentValue?.example
         XCTAssertNotNil(requestExample)
         XCTAssertNotNil(document.paths["/hello"]?.pathItemValue?.post?.responses[.status(code: 201)])
         let requestExampleDict = requestExample?.value as? [String: Any]
@@ -117,7 +120,7 @@ struct TestIndexRouteContext: RouteContext {
 
     static let defaultContentType: HTTPMediaType? = nil
 
-    static let shared = Self()
+    @MainActor static let shared = Self()
 
     let echo: IntegerQueryParam = .init(name: "echo")
 

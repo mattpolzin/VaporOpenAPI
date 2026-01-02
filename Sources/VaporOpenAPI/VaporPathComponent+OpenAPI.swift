@@ -2,8 +2,6 @@
 //  VaporPathComponent+OpenAPI.swift
 //  App
 //
-//  Created by Mathew Polzin on 12/8/19.
-//
 
 import Vapor
 import VaporTypedRoutes
@@ -29,9 +27,8 @@ extension Vapor.PathComponent {
         case .parameter(let name):
             let meta = route.userInfo[AnySendableHashable("typed_parameter:\(name)")] as? TypedPathComponent.Meta
 
-            return .init(
+            return .path(
                 name: name,
-                context: .path,
                 schema: (meta?.type as? OpenAPISchemaType.Type)?.openAPISchema ?? .string,
                 description: meta?.description
             )
