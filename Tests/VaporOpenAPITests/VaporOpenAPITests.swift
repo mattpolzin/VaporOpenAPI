@@ -120,7 +120,7 @@ struct TestIndexRouteContext: RouteContext {
 
     static let defaultContentType: HTTPMediaType? = nil
 
-    @MainActor static let shared = Self()
+    static let shared = Self()
 
     let echo: IntegerQueryParam = .init(name: "echo")
 
