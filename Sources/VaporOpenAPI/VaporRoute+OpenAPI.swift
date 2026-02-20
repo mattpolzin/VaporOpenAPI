@@ -2,8 +2,6 @@
 //  VaporRoute+OpenAPIEncodedNodeType.swift
 //  AppAPIDocumentation
 //
-//  Created by Mathew Polzin on 10/19/19.
-//
 
 import Foundation
 import OpenAPIKit
@@ -66,9 +64,9 @@ extension AbstractRouteContext {
                         statusCode,
                         OpenAPI.Response(
                             description: responseReason,
-                            content: [
+                            content: .direct([
                                 (contentType ?? .json): .init(schema: .init(schema), example: example)
-                            ]
+                            ])
                         )
                     )
                 }
@@ -82,9 +80,9 @@ extension AbstractRouteContext {
                         statusCode,
                         OpenAPI.Response(
                             description: responseReason,
-                            content: [
+                            content: .direct([
                                 (contentType ?? .json): .init(schema: .init(schema), example: example)
-                            ]
+                            ])
                         )
                     )
                 }
@@ -108,9 +106,9 @@ extension AbstractRouteContext {
                 return contentType.map {
                     OpenAPI.Response(
                         description: responseReason,
-                        content: [
+                        content: .direct([
                             $0: .init(schema: .init(schema))
-                        ]
+                        ])
                     )
                 }.map { (statusCode, $0) }
         }
@@ -244,9 +242,9 @@ extension Vapor.Route {
         let schema = try requestBodyType.openAPISchema(using: encoder)
 
         return OpenAPI.Request(
-            content: [
+            content: .direct([
                 .json: .init(schema: .init(schema), example: example)
-            ]
+            ])
         )
     }
 
@@ -277,9 +275,9 @@ extension Vapor.Route {
 
                 return .init(
                     description: "Success",
-                    content: [
+                    content: .direct([
                         .json: .init(schema: .init(schema))
-                    ]
+                    ])
                 )
         }
 
